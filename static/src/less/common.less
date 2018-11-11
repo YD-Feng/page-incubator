@@ -1,0 +1,301 @@
+@import "modules/reset";
+@import "modules/public";
+@import (inline) "modules/iconfont.css";
+//系统外壳样式
+@import "modules/wrap";
+//模拟滚动条样式
+@import (inline) "modules/vue-bar.css";
+
+html,body{
+    background: #ffffff;
+    font-size: 12px;
+}
+
+//element reset
+.custom-style{
+    .el-button {
+        padding: 8px 10px;
+        font-size: 12px;
+        border-radius: 4px;
+        vertical-align: middle;
+    }
+
+    .el-radio__label{
+        font-size: 12px;
+    }
+    .el-radio__inner{
+        width: 14px;
+        height: 14px;
+        &:after{
+            width: 5px;
+            height: 5px;
+        }
+    }
+
+    .el-checkbox__label{
+        font-size: 12px;
+    }
+    .el-checkbox__inner{
+        width: 14px;
+        height: 14px;
+        &:after{
+            left: 3px;
+            top: 0;
+        }
+    }
+
+    .el-input__inner{
+        height: 30px;
+        padding: 6px 4px;
+        font-size: 12px;
+    }
+    .el-input__icon{
+        width: 30px;
+    }
+    .el-input .el-select{
+        min-width: 110px;
+    }
+
+    .el-input-number__decrease, .el-input-number__increase{
+        line-height: 28px;
+        top: 1px;
+        .el-icon-minus, .el-icon-plus{
+            vertical-align: middle;
+        }
+    }
+
+    .el-textarea__inner{
+        font-size: 12px;
+    }
+
+    .el-select{
+        line-height: 26px;
+    }
+    .el-select .el-input .el-input__icon{
+        transform: translateY(-50%) rotateZ(180deg) scale(0.8);
+        &.is-reverse{
+            transform: translateY(-50%) scale(0.8);
+        }
+    }
+    .el-select .el-input__icon+.el-input__inner{
+        padding-right: 30px;
+    }
+    .el-select-dropdown{
+        margin: 1px 0;
+        overflow: hidden;
+    }
+    .el-select-dropdown__list{
+        padding: 0;
+    }
+    .el-select-dropdown__item{
+        padding: 0 5px;
+        height: 30px;
+        line-height: 30px;
+        font-size: 12px;
+    }
+    .el-select .el-tag{
+        height: 20px;
+        line-height: 20px;
+        margin: 1px 0 1px 4px;
+    }
+
+    .el-dropdown .el-icon-caret-bottom{
+        transform: scale(0.8);
+    }
+    .el-dropdown-menu{
+        margin: 1px 0;
+        padding: 0;
+    }
+
+    .el-cascader__label{
+        font-size: 12px;
+        line-height: 30px;
+    }
+    .el-cascader .el-input .el-input__icon{
+        font-size: 12px;
+        line-height: 34px;
+        overflow: hidden;
+        transform: scale(0.8);
+        &.is-reverse{
+            transform: rotateZ(180deg) scale(0.8);
+        }
+    }
+    .el-cascader-menus{
+        margin: 1px 0;
+        overflow: hidden;
+    }
+    .el-cascader-menu{
+        padding: 0;
+    }
+    .el-cascader-menu__item{
+        padding: 0 30px 0 10px;
+        height: 30px;
+        line-height: 30px;
+    }
+
+    .el-date-editor .el-input__icon+.el-input__inner{
+        padding-right: 30px;
+    }
+    .el-time-panel__content::after, .el-time-panel__content::before{
+        margin-top: -7px;
+    }
+
+    .el-upload--picture-card i{
+        vertical-align: middle;
+    }
+
+    .el-form-item.is-error{
+        margin-bottom: 42px;
+    }
+    .el-form-item__label{
+        font-size: 12px;
+        padding: 9px 12px 9px 0;
+    }
+    .el-form-item__content{
+        line-height: 28px;
+        font-size: 12px;
+    }
+
+    .el-table{
+        font-size: 12px;
+    }
+    .el-table .el-button{
+        padding: 8px 5px;
+    }
+    .el-table .el-button+.el-button{
+        margin-left: 5px;
+    }
+
+    .el-pagination button, .el-pagination span{
+        font-size: 12px;
+    }
+    .el-pagination__editor{
+        vertical-align: baseline;
+    }
+
+    .el-menu-item, .el-submenu__title{
+        height: 40px;
+        line-height: 40px;
+        font-size: 12px;
+    }
+    .el-submenu .el-menu-item{
+        height: 40px;
+        line-height: 40px;
+    }
+    .el-menu--dark, .el-menu--dark .el-submenu .el-menu{
+        background-color: #222222;
+    }
+    .el-menu--dark .el-menu-item, .el-menu--dark .el-submenu__title, .el-menu--dark .el-menu-item-group__title{
+        color: #cccccc;
+    }
+    .el-menu--dark .el-menu-item.is-active{
+        background-color: #48576a;
+    }
+
+    .el-breadcrumb{
+        font-size: 12px;
+        line-height: 30px;
+        padding-bottom: 5px;
+        margin-bottom: 15px;
+        border-bottom: 1px solid #e2e2e2;
+    }
+    .el-breadcrumb__item__inner:hover{
+        cursor: default;
+        color: #48576a;
+    }
+    .el-breadcrumb__item:last-child .el-breadcrumb__item__inner{
+        color: #20a0ff;
+        &:hover{
+            color: #20a0ff;
+        }
+    }
+
+    .el-message-box__btns{
+        text-align: center;
+        .el-button{
+            width: 60px;
+        }
+    }
+
+    .el-radio-button__inner{
+        padding: 0 15px;
+        font-size: 12px;
+        line-height: 28px;
+    }
+
+    .el-dialog__title{
+        font-weight: normal;
+    }
+}
+
+//公共样式
+.cm-form{
+    width: 500px;
+    .el-checkbox, .el-radio{
+        padding-right: 15px;
+    }
+    .el-checkbox+.el-checkbox, .el-radio+.el-radio{
+        margin-left: 0;
+    }
+    .el-select{
+        width: 100%;
+    }
+}
+
+.cm-form-inline{
+    width: 100%;
+    .search-form {
+        font-size: 0;
+        padding: 25px 25px 10px 25px;
+        margin-bottom: 20px;
+        border: 1px solid #e2ebf2;
+        background-color: #eaf4fd;
+    }
+    .el-form {
+        .el-form-item{
+            margin-right: 25px;
+            margin-bottom: 15px;
+        }
+        .el-form-item__label{
+            padding-bottom: 4px;
+        }
+    }
+}
+
+.cm-text-red{
+    color: #e20000;
+}
+.cm-text-orange{
+    color: #ffae2c;
+}
+.cm-text-bule{
+    color: #20a0ff;
+}
+
+.cm-link-blue{
+    color: #20a0ff;
+}
+.cm-link-blue:hover, .cm-link-blue:active{
+    color: #1773b8;
+}
+
+.cm-alert-box, .cm-confirm-box{
+    width: 290px !important;
+}
+.cm-dialog-390px{
+    width: 390px !important;
+}
+
+//弹出框页面外壳
+.dialog-page-wrap{
+    max-height: 570px;
+    overflow: auto;
+}
+
+.cm-page-wrap{
+    background-position: center center;
+    background: #6db3f2;
+    background: -moz-linear-gradient(-15deg, #6db3f2 0%, #54a3ee 44.9%, #3690f0 45.1%, #1e69de 100%);
+    background: -webkit-linear-gradient(-15deg, #6db3f2 0%, #54a3ee 44.9%, #3690f0 45.1%, #1e69de 100%);
+    background: linear-gradient(165deg, #6db3f2 0%, #54a3ee 34.9%, #54a3ee 44.9%, #3690f0 45.1%, #3690f0 55.1%, #1e69de 100%);
+}

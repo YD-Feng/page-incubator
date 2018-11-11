@@ -1,0 +1,9 @@
+//截取文本(仅针对单行)
+.text-single-line-ellipsis(@height, @line-height, @width: auto){
+    width: @width;
+    height: @height;
+    line-height: @line-height;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}

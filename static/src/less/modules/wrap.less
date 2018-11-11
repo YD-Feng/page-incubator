@@ -1,0 +1,156 @@
+html, body{
+    overflow-x: hidden;
+    overflow-y: hidden;
+}
+
+.clear{
+    clear: both;
+}
+
+.home-page{
+    padding: 46px 0 34px 0;
+}
+
+.header{
+    width: 100%;
+    height: 46px;
+    line-height: 44px;
+    padding-bottom: 2px;
+    background-color: rgba(255, 255, 255, 0.3);
+    box-shadow: 0 -2px 5px #333333, inset 0 -1px 3px #eeeeee;
+    color: #19305b;
+    overflow: hidden;
+    position: absolute;
+    top: 0;
+    .title{
+        float: left;
+        font-size: 20px;
+        padding-left: 15px;
+        position: relative;
+    }
+    .text{
+        font-weight: bold;
+        text-shadow: 1px 2px 0 #eeeeee;
+    }
+    .icon-buga{
+        font-size: 32px;
+        vertical-align: middle;
+        display: inline-block;
+        position: relative;
+        top: -3px;
+    }
+    .link{
+        color: #19305b;
+        &:hover{
+            color: #971023;
+        }
+    }
+    .icon-font{
+        position: relative;
+    }
+    .icon-tuichu{
+        top: 1px;
+    }
+}
+
+.menu{
+    width: 40px;
+    position: absolute;
+    top: 51px;
+    left: 5px;
+    .item{
+        width: 40px;
+        height: 40px;
+        line-height: 40px;
+        margin-bottom: 5px;
+        color: #19305b;
+        background-color: rgba(255, 255, 255, 0.2);
+        box-shadow: 0px 1px 2px #333, inset 0 2px 3px #eeeeee;
+        border-radius: 4px;
+        position: relative;
+        text-align: center;
+        font-size: 16px;
+        overflow: hidden;
+        cursor: pointer;
+        .icon-font{
+            font-size: 24px;
+            position: relative;
+        }
+        .icon-mima{
+            top: -2px;
+        }
+        .light {
+            cursor: pointer;
+            position: absolute;
+            left: -100%;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-image: -webkit-linear-gradient(0deg, hsla(0, 0%, 100%, 0), hsla(0, 0%, 100%, 0.5), hsla(0, 0%, 100%, 0));
+            transform: skewx(-25deg);
+            -o-transform: skewx(-25deg);
+            -moz-transform: skewx(-25deg);
+            -webkit-transform: skewx(-25deg);
+        }
+        &:hover{
+            .light {
+                transition: all .3s ease;
+                left: 100%;
+            }
+        }
+        &:last-child{
+            position: absolute;
+            bottom: 0;
+            margin-bottom: 0;
+        }
+    }
+}
+.el-tooltip__popper.is-menu-tooltip {
+    background: rgba(30, 43, 59, 0.6);
+    color: #ffffff;
+    .popper__arrow{
+        opacity: 0.6;
+    }
+}
+
+.container{
+    margin: 5px 5px 5px 50px;
+    background-color: #ffffff;
+    border-radius: 4px;
+    box-shadow: inset 0 1px 5px #333333;
+    padding: 3px 0 1px 0;
+}
+.container-inner{
+    overflow: auto;
+}
+
+.footer{
+    width: 100%;
+    height: 34px;
+    line-height: 32px;
+    padding-top: 2px;
+    font-size: 12px;
+    text-align: center;
+    background-color: rgba(255, 255, 255, 0.5);
+    box-shadow: 0 2px 5px #333333, inset 0 1px 3px #eeeeee;
+    color: #19305b;
+    position: fixed;
+    z-index: 1000;
+    bottom: 0;
+    left: 0;
+    a{
+        color: #5b9bd1;
+        &:hover{
+            color: #3175af;
+        }
+    }
+    .icon-chrome{
+        display: inline-block;
+        width: 16px;
+        height: 16px;
+        background: url(../../imgs/chrome.png);
+        background-size: 100% 100%;
+        vertical-align: middle;
+        margin-top: -2px;
+    }
+}
