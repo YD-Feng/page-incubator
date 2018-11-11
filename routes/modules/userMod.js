@@ -1,15 +1,15 @@
 var crypto = require('crypto'),
-    userSrv = require('../../dataSrv/modules/userSrv');
+    userSrv = require('../../dataSrv/modules/userSrv'),
+    apiCode = require('../../config/apiCode');
 
 module.exports = {
     //用户登录
     login: function (req, res) {
-        var password = crypto.createHash('md5').update(req.body.password).digest('hex'),
-            sendData = null;
+        var sendData = null;
 
         userSrv.check({
             userName: req.body.userName,
-            password: password
+            password: req.body.password
         }, function (result) {
 
             if (result.length > 0) {
@@ -33,7 +33,7 @@ module.exports = {
                 req.session.userId = result[0].id;
 
                 sendData = {
-                    code: 200,
+                    code: apiCode.success,
                     data: result[0],
                     msg: '登录成功！'
                 };
@@ -42,7 +42,7 @@ module.exports = {
             } else {
 
                 sendData = {
-                    code: 9999,
+                    code: apiCode.loginErr,
                     data: result,
                     msg: '登录失败，用户名或密码错误！'
                 };
@@ -68,7 +68,7 @@ module.exports = {
         req.sessionStore.destroy(req.session.id, function (err) {
             if (err) throw err;
             res.send({
-                code: 200,
+                code: apiCode.success,
                 data: null,
                 msg: '退出登录成功！'
             });
@@ -79,7 +79,7 @@ module.exports = {
     getUserList: function (req, res, logger) {
         userSrv.getUserList(req.query, function (result) {
             res.send({
-                code: 200,
+                code: apiCode.success,
                 data: result,
                 msg: ''
             });
@@ -92,7 +92,7 @@ module.exports = {
 
         if (req.query.token == req.cookies.userToken) {
             result = {
-                code: 200,
+                code: apiCode.success,
                 data: {
                     status: 1,
                     statusDec: '用户已登录',
@@ -104,7 +104,7 @@ module.exports = {
             }
         } else {
             result = {
-                code: 200,
+                code: apiCode.success,
                 data: {
                     status: 0,
                     statusDec: '用户未登录',
@@ -195,7 +195,7 @@ module.exports = {
                 if (result.affectedRows > 0) {
 
                     sendData = {
-                        code: 200,
+                        code: apiCode.success,
                         data: result,
                         msg: '操作成功！'
                     };
@@ -203,7 +203,7 @@ module.exports = {
                 } else {
 
                     sendData = {
-                        code: 9999,
+                        code: apiCode.dataBaseErr,
                         data: result,
                         msg: '操作失败！'
                     };

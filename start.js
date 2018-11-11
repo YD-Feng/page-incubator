@@ -70,3 +70,5 @@ function onListening () {
 
     debug('Listening on ' + bind);
 }
+
+console.info('服务启动成功，请在浏览器访问 http://127.0.0.1:3000');

@@ -9,7 +9,7 @@ module.exports = [
         },
         children: [
             {
-                path: 'activityList',
+                path: '/activityList',
                 name: 'activityList',
                 component: function (resolve) {
                     require.ensure(['./../views/activityList/main.vue'], function (require) {

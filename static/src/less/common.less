@@ -13,11 +13,29 @@ html,body{
 
 //element reset
 .custom-style{
-    .el-button {
+    .el-button{
         padding: 8px 10px;
         font-size: 12px;
         border-radius: 4px;
         vertical-align: middle;
+    }
+    .el-button--small{
+        padding: 5px 5px;
+    }
+    .el-button--mini{
+        padding: 4px;
+        font-size: 12px;
+        border-radius: 4px;
+    }
+    .el-button--text{
+        -webkit-appearance: none;
+        -moz-user-select: text;
+        -webkit-user-select: text;
+        -ms-user-select: text;
+    }
+    .el-button--info{
+        background-color: #0ebbff;
+        border-color: #0ebbff;
     }
 
     .el-radio__label{
@@ -39,8 +57,8 @@ html,body{
         width: 14px;
         height: 14px;
         &:after{
-            left: 3px;
-            top: 0;
+            left: 4px;
+            top: 1px;
         }
     }
 
@@ -49,11 +67,67 @@ html,body{
         padding: 6px 4px;
         font-size: 12px;
     }
+    .el-input.error .el-input__inner{
+        border-color: #e20000;
+    }
+    .el-input.is-error .el-input__inner{
+        border-color: #e20000;
+        color: #e20000;
+    }
+
+    .el-input--prefix .el-input__inner{
+        padding-left: 26px;
+    }
+    .el-input--prefix .el-input__icon{
+        line-height: 1;
+        width: 24px;
+    }
+    .el-input__prefix{
+        left: 2px;
+    }
+    .el-input--suffix .el-input__inner{
+        padding-right: 26px;
+    }
+    .el-input--suffix .el-input__icon{
+        line-height: 1;
+        width: 24px;
+    }
+    .el-input__suffix{
+        right: 2px;
+    }
+
+
     .el-input__icon{
-        width: 30px;
+        width: 28px;
     }
     .el-input .el-select{
         min-width: 110px;
+    }
+
+    .el-date-editor .el-range-separator{
+        position: relative;
+        top: -1px;
+        width: auto;
+    }
+    .el-date-editor .el-range__close-icon{
+        position: relative;
+        right: -3px;
+    }
+    .el-date-editor .el-range__icon, .el-date-editor .el-range-separator, .el-date-editor .el-range__close-icon{
+        line-height: 16px;
+    }
+    .el-date-editor .el-range-input{
+        font-size: 12px;
+    }
+    .el-date-editor.el-input--prefix .el-input__inner{
+        padding-left: 4px;
+    }
+    .el-date-editor.el-input--prefix .el-input__prefix{
+        left: auto;
+        right: 2px;
+    }
+    .el-date-editor .el-input__suffix-inner{
+        background-color: #ffffff;
     }
 
     .el-input-number__decrease, .el-input-number__increase{
@@ -71,14 +145,11 @@ html,body{
     .el-select{
         line-height: 26px;
     }
-    .el-select .el-input .el-input__icon{
-        transform: translateY(-50%) rotateZ(180deg) scale(0.8);
-        &.is-reverse{
-            transform: translateY(-50%) scale(0.8);
-        }
+    .el-input__suffix{
+        right: 2px;
     }
     .el-select .el-input__icon+.el-input__inner{
-        padding-right: 30px;
+        padding-right: 28px;
     }
     .el-select-dropdown{
         margin: 1px 0;
@@ -107,9 +178,12 @@ html,body{
         padding: 0;
     }
 
+    .el-cascader{
+        line-height: 28px;
+    }
     .el-cascader__label{
         font-size: 12px;
-        line-height: 30px;
+        line-height: 28px;
     }
     .el-cascader .el-input .el-input__icon{
         font-size: 12px;
@@ -131,6 +205,7 @@ html,body{
         padding: 0 30px 0 10px;
         height: 30px;
         line-height: 30px;
+        font-size: 12px;
     }
 
     .el-date-editor .el-input__icon+.el-input__inner{
@@ -149,7 +224,8 @@ html,body{
     }
     .el-form-item__label{
         font-size: 12px;
-        padding: 9px 12px 9px 0;
+        line-height: 24px;
+        padding: 4px 12px 4px 0;
     }
     .el-form-item__content{
         line-height: 28px;
@@ -159,11 +235,28 @@ html,body{
     .el-table{
         font-size: 12px;
     }
-    .el-table .el-button{
+    .el-table .el-button--text{
         padding: 8px 5px;
+    }
+    .el-table .el-button--small{
+        padding: 5px 5px;
     }
     .el-table .el-button+.el-button{
         margin-left: 5px;
+    }
+    .el-table thead{
+        color: #666666;
+    }
+    .el-table th{
+        font-weight: bold;
+        background-color: #eef1f6;
+    }
+    .el-table--border, .el-table--group, .el-table--border td, .el-table--border th{
+        border-color: #dfe6ec;
+    }
+    .el-table .el-table-column--selection .cell{
+        padding-left: 4px;
+        padding-right: 4px;
     }
 
     .el-pagination button, .el-pagination span{
@@ -173,14 +266,35 @@ html,body{
         vertical-align: baseline;
     }
 
+    .el-menu{
+        background-color: #e7eaef;
+    }
+    .el-submenu .el-menu{
+        background-color: #e0e2e7;
+    }
     .el-menu-item, .el-submenu__title{
         height: 40px;
         line-height: 40px;
         font-size: 12px;
+        color: #48576a;
+    }
+    .el-menu-item.is-active {
+        color: #20a0ff;
+    }
+    .el-submenu__title{
+        font-weight: bold;
     }
     .el-submenu .el-menu-item{
         height: 40px;
         line-height: 40px;
+        padding-right: 20px;
+        min-width: 185px;
+    }
+    .el-menu-item-group__title{
+        height: 40px;
+        line-height: 40px;
+        padding: 0 35px;
+        font-size: 12px;
     }
     .el-menu--dark, .el-menu--dark .el-submenu .el-menu{
         background-color: #222222;
@@ -212,6 +326,7 @@ html,body{
 
     .el-message-box__btns{
         text-align: center;
+        padding-bottom: 10px;
         .el-button{
             width: 60px;
         }
@@ -223,8 +338,20 @@ html,body{
         line-height: 28px;
     }
 
-    .el-dialog__title{
-        font-weight: normal;
+    .el-table__expanded-cell{
+        padding: 20px 40px;
+    }
+
+    .el-loading-mask{
+        background-color: rgba(255, 255, 255, 0.4);
+    }
+
+    .el-dialog__body{
+        padding: 10px 20px 30px 20px;
+    }
+
+    .el-tree-node__content{
+        height: 30px;
     }
 }
 
@@ -265,11 +392,17 @@ html,body{
 .cm-text-red{
     color: #e20000;
 }
+.cm-text-green{
+    color: #13ce66;
+}
 .cm-text-orange{
     color: #ffae2c;
 }
-.cm-text-bule{
+.cm-text-blue{
     color: #20a0ff;
+}
+.cm-text-light{
+    color: #999999;
 }
 
 .cm-link-blue{

@@ -1,8 +1,7 @@
 <template>
     <div class="cm-inner-page">
         <el-breadcrumb separator="/">
-            <el-breadcrumb-item>bug-center</el-breadcrumb-item>
-            <el-breadcrumb-item>项目列表</el-breadcrumb-item>
+            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
         </el-breadcrumb>
 
         <div class="cm-form-inline">
@@ -38,25 +37,12 @@
                     </el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="项目名称" prop="title">
+                <el-form-item label="活动名称" prop="title">
                     <el-input
                         v-model="form.title"
                         placeholder="请输入项目名称"
                         class="form-input-width">
                     </el-input>
-                </el-form-item>
-
-                <el-form-item label="项目状态" prop="status">
-                    <el-select
-                        v-model="form.status"
-                        placeholder="全部"
-                        class="form-input-width">
-                        <el-option label="全部" value=""></el-option>
-                        <el-option label="未开始" value="notStarted"></el-option>
-                        <el-option label="进行中" value="hasStarted"></el-option>
-                        <el-option label="已结束" value="over"></el-option>
-                        <el-option label="已停用" value="stop"></el-option>
-                    </el-select>
                 </el-form-item>
 
                 <el-form-item class="pl10px">
@@ -67,7 +53,7 @@
         </div>
 
         <div class="oh">
-            <el-button class="mb5px" type="info" @click="goToDetail('add')">新建项目</el-button>
+            <el-button class="mb5px" type="info" @click="goToDetail('add')">添加活动</el-button>
         </div>
         <!--列表-->
         <el-table
@@ -82,16 +68,9 @@
             </el-table-column>
 
             <el-table-column
-                label="项目名称"
+                label="活动名称"
                 prop="title"
                 min-width="200">
-            </el-table-column>
-
-            <el-table-column
-                label="项目状态"
-                min-width="100"
-                align="center">
-                <template scope="scope">{{scope.row | transStatus}}</template>
             </el-table-column>
 
             <el-table-column
@@ -102,7 +81,7 @@
             </el-table-column>
 
             <el-table-column
-                label="项目描述"
+                label="活动描述"
                 prop="desc"
                 min-width="350">
             </el-table-column>
@@ -116,24 +95,22 @@
                     <el-button
                         size="small"
                         type="primary"
-                        @click="goToTaskList(scope.row)"
-                        class="mr5px">
-                        查看任务
+                        @click="goToTaskList(scope.row)">
+                        管理页面
                     </el-button>
 
                     <el-button
                         size="small"
                         type="primary"
                         @click="goToDetail('edit', scope.row.activityId)"
-                        class="mr5px">
+                        class="ml5px">
                         编辑
                     </el-button>
 
                     <el-popover :ref="'p' + scope.$index" placement="top">
                         <p class="lh40px pt5px pb5px">
                             <i class="el-icon-information cm-text-orange mr5px"></i>
-                            <span v-if="scope.row.status == 0">请问确定要启动项目吗？</span>
-                            <span v-if="scope.row.status == 1">请问确定要结束项目吗？</span>
+                            请问确定要删除活动吗？
                         </p>
                         <div class="text-center">
                             <el-button type="primary" size="small" @click="doUpdateStatus(scope.$index, scope.row)">确定</el-button>
@@ -141,10 +118,11 @@
                         </div>
 
                         <el-button
-                            :type="scope.row.status == 1 ? 'warning' : 'success'"
+                            type="danger"
                             size="small"
-                            slot="reference">
-                            {{scope.row.status == 1 ? '结束' : '启动'}}
+                            slot="reference"
+                            class="ml5px">
+                            删除
                         </el-button>
                     </el-popover>
 
@@ -171,7 +149,6 @@
     import utils from 'utils';
 
     module.exports = {
-        props: ['activityType'],
         data: function () {
             return {
                 pickerOptions: {
@@ -179,16 +156,20 @@
                 },
 
                 form: {
-                    startTime: null,
-                    endTime: null,
+                    startTime: undefined,
+                    endTime: undefined,
                     title: '',
-                    status: '',
                     page: 1,
                     pageSize: 10
                 },
 
-                list: [],
+                list: [{}],
                 total: 0
+            }
+        },
+        computed: {
+            dict: function () {
+                return this.$store.state.dict.activity;
             }
         },
         watch: {
@@ -240,38 +221,12 @@
                 _this.search();
             },
             handleReset: function () {
-                this.$refs['form'].resetFields();
+                this.$refs.form.resetFields();
             },
+
             //隐藏启用、停用提示框
             hidePop: function (index) {
                 this.$refs['p' + index].doClose();
-            },
-            goToTaskList: function (project) {
-                var _this = this;
-                _this.$router.push({
-                    path: '/main/task-list/' + project.id
-                });
-            }
-        },
-        filters: {
-            transStatus: function (activity) {
-                //状态
-                var now = new Date().format('yyyy-MM-dd HH:mm:ss'),
-                    status = activity.status,
-                    startDate = activity.startDate,
-                    endDate = activity.endDate;
-
-                if (status == 'disable') {
-                    return '已停用';
-                } else if (startDate <= now && now <= endDate) {
-                    return '进行中';
-                } else if (now > endDate) {
-                    return '已结束';
-                } else if (now < startDate) {
-                    return '未开始';
-                }
-
-                return '未知';
             }
         },
         created: function () {
@@ -284,11 +239,5 @@
 <style scoped>
     .form-input-width{
         width: 150px;
-    }
-</style>
-
-<style>
-    .pl-dialog-600{
-        width: 600px;
     }
 </style>

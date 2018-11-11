@@ -1,6 +1,7 @@
 module.exports = {
     state: {
-        dict: {}
+        activity: {
+        }
     },
     mutations: {
         setDict: function (state, dict) {

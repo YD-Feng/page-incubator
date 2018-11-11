@@ -38,6 +38,8 @@
 </template>
 
 <script>
+    import Sha256 from 'js-sha256';
+
     module.exports = {
         data: function () {
             return {
@@ -65,12 +67,12 @@
                     url: '/user/login',
                     data: {
                         userName: _this.form.userName,
-                        password: _this.form.password
+                        password: Sha256(_this.form.password)
                     },
                     success: function (res) {
 
                         _this.$router.push({
-                            path: '/main/project-list'
+                            path: '/activityList'
                         });
 
                     }

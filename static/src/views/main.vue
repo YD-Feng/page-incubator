@@ -3,9 +3,9 @@
         <!-- 页头 -->
         <div class="header">
             <h1 class="title">
-                <i class="icon-font icon-buga"></i>
                 <span class="text">
-                    Bug Center
+                    <i class="icon-font icon-xianxing_fuhua rel" style="font-size: 24px; top: 2px;"></i>
+                    H5活动孵化器
                 </span>
             </h1>
 
@@ -16,16 +16,9 @@
 
         <!-- 侧栏菜单 -->
         <ul class="menu" v-auto-height="{'delHeight': 90}">
-            <el-tooltip effect="menu-tooltip" content="主页" placement="right">
+            <el-tooltip effect="menu-tooltip" content="活动" placement="right">
                 <li class="item">
                     <i class="icon-font icon-zhuye"></i>
-                    <i class="light"></i>
-                </li>
-            </el-tooltip>
-
-            <el-tooltip effect="menu-tooltip" content="项目" placement="right">
-                <li class="item">
-                    <i class="icon-font icon-project"></i>
                     <i class="light"></i>
                 </li>
             </el-tooltip>
@@ -37,7 +30,14 @@
                 </li>
             </el-tooltip>
 
-            <el-tooltip effect="menu-tooltip" content="组织" placement="right">
+            <el-tooltip effect="menu-tooltip" content="角色管理" placement="right">
+                <li class="item">
+                    <i class="icon-font icon-project"></i>
+                    <i class="light"></i>
+                </li>
+            </el-tooltip>
+
+            <el-tooltip effect="menu-tooltip" content="用户管理" placement="right">
                 <li class="item">
                     <i class="icon-font icon-zuzhi"></i>
                     <i class="light"></i>

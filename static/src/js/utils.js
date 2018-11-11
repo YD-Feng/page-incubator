@@ -37,43 +37,69 @@ Date.prototype.format = function (fmt) {
     return fmt;
 };
 
-module.exports = {
-    pickerOptShortcuts: [
-        {
-            text: '00:00:00',
-            onClick: function (vm) {
-                vm.date = new Date(vm.visibleDate + ' 00:00:00');
-            }
-        },
-        {
-            text: '23:59:59',
-            onClick: function (vm) {
-                vm.date = new Date(vm.visibleDate + ' 23:59:59');
-            }
-        },
-        {
-            text: '10:00:00',
-            onClick: function (vm) {
-                vm.date = new Date(vm.visibleDate + ' 10:00:00');
-            }
-        },
-        {
-            text: '12:00:00',
-            onClick: function (vm) {
-                vm.date = new Date(vm.visibleDate + ' 12:00:00');
-            }
-        },
-        {
-            text: '14:00:00',
-            onClick: function (vm) {
-                vm.date = new Date(vm.visibleDate + ' 14:00:00');
-            }
-        },
-        {
-            text: '17:00:00',
-            onClick: function (vm) {
-                vm.date = new Date(vm.visibleDate + ' 17:00:00');
-            }
+var pickerOptShortcuts = [
+    {
+        text: '00:00:00',
+        onClick: function (vm) {
+            vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
+            vm.userInputTime = '00:00:00';
+            vm.date = new Date(vm.userInputDate + ' 00:00:00');
+            vm.value = vm.date;
+            vm.emit(vm.date, vm.showTime);
         }
-    ]
+    },
+    {
+        text: '23:59:59',
+        onClick: function (vm) {
+            vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
+            vm.userInputTime = '23:59:59';
+            vm.date = new Date(vm.userInputDate + ' 23:59:59');
+            vm.value = vm.date;
+            vm.emit(vm.date, vm.showTime);
+        }
+    },
+    {
+        text: '10:00:00',
+        onClick: function (vm) {
+            vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
+            vm.userInputTime = '10:00:00';
+            vm.date = new Date(vm.userInputDate + ' 10:00:00');
+            vm.value = vm.date;
+            vm.emit(vm.date, vm.showTime);
+        }
+    },
+    {
+        text: '12:00:00',
+        onClick: function (vm) {
+            vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
+            vm.userInputTime = '12:00:00';
+            vm.date = new Date(vm.userInputDate + ' 12:00:00');
+            vm.value = vm.date;
+            vm.emit(vm.date, vm.showTime);
+        }
+    },
+    {
+        text: '14:00:00',
+        onClick: function (vm) {
+            vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
+            vm.userInputTime = '14:00:00';
+            vm.date = new Date(vm.userInputDate + ' 14:00:00');
+            vm.value = vm.date;
+            vm.emit(vm.date, vm.showTime);
+        }
+    },
+    {
+        text: '17:00:00',
+        onClick: function (vm) {
+            vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
+            vm.userInputTime = '17:00:00';
+            vm.date = new Date(vm.userInputDate + ' 17:00:00');
+            vm.value = vm.date;
+            vm.emit(vm.date, vm.showTime);
+        }
+    }
+];
+
+module.exports = {
+    pickerOptShortcuts: pickerOptShortcuts
 };

@@ -8,7 +8,7 @@ var path = require('path'),
 module.exports = {
     //JS文件引用入口配置
     entry: {
-        common: ['vue', 'vue-router', 'vuex', 'vuex-logger', 'vue-resource'],
+        common: ['vue', 'vue-router', 'vuex', 'vuex-logger', 'vue-resource', 'js-sha256'],
         element: ['element-ui'],
         utils: ['utils'],
         app: [
@@ -41,13 +41,8 @@ module.exports = {
         }),
         //公共组件提取插件
         new webpack.optimize.CommonsChunkPlugin({
-            name: ['common', 'element']
-        }),
-        //文件复制插件
-        new copyWebpackPlugin([{
-            from: path.resolve(__dirname, './src/lib'),
-            to: path.resolve(__dirname, './dist/lib')
-        }])
+            name: ['common', 'element', 'utils']
+        })
     ],
 
     module: {
@@ -115,7 +110,7 @@ module.exports = {
             'vuex': path.resolve(__dirname, 'node_modules/vuex/dist/vuex.min.js'),
             'vuex-logger': path.resolve(__dirname, 'node_modules/vuex/dist/logger.js'),
             'vue-resource': path.resolve(__dirname, 'node_modules/vue-resource/dist/vue-resource.js'),
-            'element-style': path.resolve(__dirname, 'node_modules/element-ui/lib/theme-default/index.css'),
+            'element-style': path.resolve(__dirname, 'node_modules/element-ui/lib/theme-chalk/index.css'),
             'vue-draggable': path.resolve(__dirname, 'node_modules/vuedraggable/dist/vuedraggable.js'),
             'utils': path.resolve(__dirname, 'src/js/utils.js')
         }
