@@ -3,7 +3,8 @@ var gulp = require('gulp'),
     clean = require('gulp-clean'),
     copy = require('gulp-copy'),
     uglify = require('gulp-uglify'),
-    sequence = require('gulp-sequence');
+    sequence = require('gulp-sequence'),
+    extractTextPlugin = require('extract-text-webpack-plugin');
 
 /*
  * 任务：清除生编译生成的文件
@@ -84,7 +85,7 @@ gulp.task('build', sequence('clean', 'webpack', 'uglify', 'clean-dist-js', 'copy
  * */
 gulp.task('watch', ['clean'], function (cb) {
     var flag = true,
-        config = require('./webpack.config');
+        config = require('./webpack.watch.config');
 
     webpack(config).watch({
         aggregateTimeout: 300,

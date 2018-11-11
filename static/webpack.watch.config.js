@@ -20,8 +20,8 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, './dist/'), //指定生成文件的保存路径
         publicPath: '../', //更新 src、url 里的值，为其添加前缀（实际输出：publicPath + fileName）
-        filename: 'js/[name].[hash:8].js',
-        chunkFilename: 'js/modules/[name].[hash:8].js'
+        filename: 'js/[name].js',
+        chunkFilename: 'js/modules/[name].js'
     },
 
     //插件项
@@ -34,7 +34,7 @@ module.exports = {
         }),
         //文件单独提取插件
         new extractTextPlugin({
-            filename: 'css/style.[hash:8].css',
+            filename: 'css/style.css',
             allChunks: true,
             disable: false
         }),
@@ -79,7 +79,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'img/[name].[hash:8].[ext]'
+                            name: 'img/[name].[ext]'
                         }
                     }
                 ]
@@ -90,7 +90,7 @@ module.exports = {
                     {
                         loader: 'file-loader',
                         options: {
-                            name: 'font/[name].[hash:8].[ext]'
+                            name: 'font/[name].[ext]'
                         }
                     }
                 ]
