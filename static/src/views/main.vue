@@ -82,7 +82,7 @@
 
 <script>
     module.exports = {
-        data: function () {
+        data () {
             return {
                 form: {
                     userName: '',
@@ -92,7 +92,7 @@
             }
         },
         methods: {
-            logout: function () {
+            logout () {
                 var _this = this;
 
                 _this.$get({

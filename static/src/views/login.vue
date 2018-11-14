@@ -41,7 +41,7 @@
     import Sha256 from 'js-sha256';
 
     module.exports = {
-        data: function () {
+        data () {
             return {
                 form: {
                     user_name: '',
@@ -51,7 +51,7 @@
             }
         },
         methods: {
-            login: function (e) {
+            login (e) {
                 e.preventDefault();
                 var _this = this;
 

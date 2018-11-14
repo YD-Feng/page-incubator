@@ -117,4 +117,16 @@ module.exports = {
 
         });
     },
+
+    del: function (opts, callback) {
+        connPool.getConnection(function (err, connection) {
+            var SQL = 'delete from activity where activity_id = ' + connPool.escape(opts.activity_id);
+
+            connection.query(SQL, function (err, result) {
+                if (err) throw err;
+                callback(result);
+                connection.release();//释放链接
+            });
+        });
+    }
 };

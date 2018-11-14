@@ -22,7 +22,8 @@ var _ = require('underscore'), //引入 underscore
             '/user/login': userMod.login,
             '/user/add': userMod.save,
             '/activity/add': activityMod.save,
-            '/activity/update': activityMod.save
+            '/activity/update': activityMod.save,
+            '/activity/del': activityMod.del
         }
     };
 

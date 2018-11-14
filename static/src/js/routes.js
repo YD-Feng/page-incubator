@@ -16,16 +16,16 @@ module.exports = [
                         resolve(require('./../views/activityList/main.vue'));
                     }, 'activityList');
                 }
-            }/*,
+            },
             {
-                path: 'activityDetail/:activityId?',
-                name: 'activityDetail',
+                path: 'activityPageList/:activityId?',
+                name: 'activityPageList',
                 component: function (resolve) {
-                    require.ensure(['./../views/activityDetail/main.vue'], function (require) {
-                        resolve(require('./../views/activityDetail/main.vue'));
-                    }, 'activityDetail');
+                    require.ensure(['./../views/activityPageList/main.vue'], function (require) {
+                        resolve(require('./../views/activityPageList/main.vue'));
+                    }, 'activityPageList');
                 }
-            }*/
+            }
         ]
     },
     {

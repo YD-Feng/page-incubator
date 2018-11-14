@@ -1,7 +1,7 @@
 <template>
     <div class="cm-inner-page">
         <el-breadcrumb separator="/">
-            <el-breadcrumb-item>活动列表</el-breadcrumb-item>
+            <el-breadcrumb-item>活动管理</el-breadcrumb-item>
         </el-breadcrumb>
 
         <div class="cm-form-inline">
@@ -107,7 +107,7 @@
                     <el-button
                         size="small"
                         type="primary"
-                        @click="goToTaskList(scope.row)">
+                        @click="goToManagePage(scope.row)">
                         管理页面
                     </el-button>
 
@@ -125,7 +125,7 @@
                             请问确定要删除活动吗？
                         </p>
                         <div class="text-center">
-                            <el-button type="primary" size="small" @click="doUpdateStatus(scope.$index, scope.row)">确定</el-button>
+                            <el-button type="primary" size="small" @click="handleDelActivity(scope.$index, scope.row)">确定</el-button>
                             <el-button type="warning" size="small" @click="hidePop(scope.$index)">取消</el-button>
                         </div>
 
@@ -162,10 +162,10 @@
                 <table width="100%">
                     <tr>
                         <td width="70"
-                            class="text-right f12px">
+                            class="text-right f12px lh30px">
                             活动名称
                         </td>
-                        <td class="pl10px">
+                        <td valign="top" class="pl10px">
                             <el-input
                                 placeholder="请输入活动名称"
                                 v-model="dialog.activity_name"
@@ -175,10 +175,11 @@
                     </tr>
                     <tr>
                         <td width="70"
-                            class="text-right pt10px f12px">
+                            valign="top"
+                            class="text-right pt10px f12px lh30px">
                             活动描述
                         </td>
-                        <td class="pl10px pt10px">
+                        <td valign="top" class="pl10px pt10px">
                             <el-input
                                 type="textarea"
                                 :rows="3"
@@ -213,7 +214,7 @@
     import utils from 'utils';
 
     module.exports = {
-        data: function () {
+        data () {
             return {
                 pickerOptions: {
                     shortcuts: utils.pickerOptShortcuts
@@ -239,17 +240,17 @@
             }
         },
         computed: {
-            dict: function () {
+            dict () {
                 return this.$store.state.dict.activity;
             }
         },
         watch: {
-            refreshListFlag: function () {
+            refreshListFlag () {
                 this.search();
             }
         },
         methods: {
-            search: function () {
+            search () {
                 var _this = this,
                     params = Object.assign({}, _this.form);
 
@@ -276,24 +277,40 @@
                     }
                 });
             },
-            handleSizeChange: function (val) {
+            handleSizeChange (val) {
                 var _this = this;
                 _this.form.pageSize = val;
                 _this.form.page = 1;
                 _this.search();
             },
-            handleCurrentChange: function (val) {
+            handleCurrentChange (val) {
                 var _this = this;
                 _this.form.page = val;
                 _this.search();
             },
-            handleReset: function () {
+            handleReset () {
                 this.$refs.form.resetFields();
             },
 
             //隐藏启用、停用提示框
-            hidePop: function (index) {
+            hidePop (index) {
                 this.$refs['p' + index].doClose();
+            },
+            handleDelActivity (index, row) {
+                var _this = this;
+
+                _this.$post({
+                    url: '/activity/del',
+                    data: {
+                        activity_id: row.activity_id
+                    },
+                    success: function (res) {
+                        _this.$message.success('删除成功');
+                        _this.form.page = 1;
+                        _this.hidePop(index);
+                        _this.search();
+                    }
+                });
             },
 
             openDialog (row) {
@@ -333,6 +350,15 @@
                         _this.form.page = 1;
                         _this.search();
                         _this.closeDialog();
+                    }
+                });
+            },
+
+            goToManagePage (row) {
+                this.$router.push({
+                    path: '/activityPageList/' + row.activity_id,
+                    query: {
+                        activity_name: row.activity_name
                     }
                 });
             }

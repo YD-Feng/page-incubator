@@ -37,5 +37,28 @@ module.exports = {
             }
 
         });
+    },
+
+    //删除活动
+    del: function (req, res) {
+        activitySrv.del({
+            activity_id: req.body.activity_id
+        }, function (result) {
+
+            if (result.affectedRows > 0) {
+                res.send({
+                    code: apiCode.success,
+                    data: result,
+                    msg: '操作成功'
+                });
+            } else {
+                res.send({
+                    code: apiCode.dataBaseErr,
+                    data: result,
+                    msg: '操作失败'
+                });
+            }
+
+        });
     }
 };
