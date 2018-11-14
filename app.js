@@ -102,7 +102,7 @@ app.use(function (req, res, next) {
 app.use(function (err, req, res, next) {
     logger.error(err);
     res.status(err.status || 500);
-    res.send('error', {
+    res.send(err.status, {
         code: err.status || 500,
         msg: err.message
     });
@@ -110,23 +110,3 @@ app.use(function (err, req, res, next) {
 
 //导出 app 实例供其他模块调用
 module.exports = app;
-
-var sql = require('sql'),
-    user = sql.define({
-        name: 'user',
-        columns: ['id', 'user_name', 'password', 'group', 'nick_name', 'avatar']
-    });
-
-sql.setDialect('mysql');
-
-var query = user
-    .select(user.star())
-    .from(user)
-    .where(
-        user['user_name'].equals('asd')
-            .and(user['password'].equals('qwe'))
-            .and(user['group'].equals('ytr'))
-    )
-    .toQuery();
-
-console.info(query);

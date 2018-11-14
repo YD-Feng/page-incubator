@@ -6,7 +6,7 @@ var validateEngine = function (logger) {
                 validateField = require('./validateField'),
                 field,
                 result,
-                params = typeof req.query == 'undefined' ? req.body : req.query,
+                params = req.method.toUpperCase() == 'POST' ? req.body : req.query,
                 flag = true,
                 path = req.path;
 
@@ -15,7 +15,7 @@ var validateEngine = function (logger) {
 
                     logger && logger.error(path + ' 接口校验错误：未登录');
                     res.send({
-                        code: apiCode.validateErr,
+                        code: apiCode.unLoginErr,
                         data: null,
                         msg: '接口校验错误：未登录'
                     });
@@ -30,7 +30,7 @@ var validateEngine = function (logger) {
 
                     result = validateField(params[field], arr[0], field, arr[1], params, validateConfig[path]);
 
-                    if (result.code != 0) {
+                    if (result.code == apiCode.validateErr) {
 
                         logger && logger.error(path + ' ' + result.msg);
                         res.send(result);

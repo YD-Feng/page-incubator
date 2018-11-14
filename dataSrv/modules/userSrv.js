@@ -1,27 +1,16 @@
-var connPool = require('../connPool'),
-    sql = require('sql'),
-    user = sql.define({
-        name: 'user',
-        columns: ['id', 'user_name', 'password', 'group', 'nick_name', 'avatar']
-    });
-
-sql.setDialect('mysql');
+var connPool = require('../connPool');
 
 module.exports = {
     //用户信息核对
     check: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
+            var SQL =
+                'select * from user where user_name=' +
+                connPool.escape(opts.user_name) +
+                ' and password=' +
+                connPool.escape(opts.password);
 
-            var query = user
-                .select(user.star())
-                .from(user)
-                .where(
-                    user['user_name'].equals(opts.userName)
-                        .and(user['password'].equals(opts.password))
-                )
-                .toQuery();
-
-            connection.query(query.text, query.values, function (err, result) {
+            connection.query(SQL, function (err, result) {
                 if (err) throw err;
                 callback(result);
                 connection.release();//释放链接
@@ -37,8 +26,8 @@ module.exports = {
                 countSQL = 'select count(*) from user',
                 listSQL = 'select * from user';
 
-            if (!!opts.userName) {
-                str = (flag == 0 ? ' where ' : ' and ') + 'name=' + connPool.escape(opts.userName);
+            if (!!opts.user_name) {
+                str = (flag == 0 ? ' where ' : ' and ') + 'name=' + connPool.escape(opts.user_name);
                 countSQL += str;
                 listSQL += str;
                 flag++;
@@ -143,5 +132,18 @@ module.exports = {
             }
 
         });
-    }
+    },
+
+    //获取用户分组列表
+    getUserGroupList: function (callback) {
+        connPool.getConnection(function (err, connection) {
+            var SQL = 'select * from user_group';
+
+            connection.query(SQL, function (err, result) {
+                if (err) throw err;
+                callback(result);
+                connection.release();//释放链接
+            });
+        });
+    },
 };

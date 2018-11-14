@@ -5,7 +5,7 @@
             <div class="input-wrap">
                 <span class="col-txt">用户名:</span>
                 <span class="col-input">
-                    <input class="input" v-model="form.userName" placeholder="请输入用户邮箱"></input>
+                    <input class="input" v-model="form.user_name" placeholder="请输入用户邮箱"></input>
                 </span>
             </div>
             <div class="input-wrap mt20px">
@@ -44,7 +44,7 @@
         data: function () {
             return {
                 form: {
-                    userName: '',
+                    user_name: '',
                     password: ''
                 },
                 flag: navigator.userAgent.toLowerCase().indexOf('webkit') != -1
@@ -55,7 +55,7 @@
                 e.preventDefault();
                 var _this = this;
 
-                if (_this.form.userName == '') {
+                if (_this.form.user_name == '') {
                     _this.$message.error('请输入用户名');
                     return;
                 } else if (_this.form.password == '') {
@@ -66,7 +66,7 @@
                 _this.$post({
                     url: '/user/login',
                     data: {
-                        userName: _this.form.userName,
+                        user_name: _this.form.user_name,
                         password: Sha256(_this.form.password)
                     },
                     success: function (res) {

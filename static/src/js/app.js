@@ -35,7 +35,7 @@ window.router = new VueRouter({
 router.beforeEach(function (to, from, next) {
     if (to.name != 'login' && !Vue.prototype.$getCookie('userToken')) {
         router.push({
-            name: 'login'
+            path: '/login'
         });
     } else {
         next();
@@ -89,23 +89,19 @@ Vue.http.interceptors.push(function (request, next) {
             if (response.ok && data.code != 200) {
 
                 if (data.code == 401) {
-                    location.href = config.LOGIN_URL + '?ReturnURL=' + location.href;
-                } else if (data.code == 403) {
-                    _this && _this.$message.error(data.desc);
+                    router.push({
+                        path: '/login'
+                    });
                 } else {
-                    _this && _this.$message.error('状态码异常！' + (data.desc || '响应格式错误'));
+                    _this && _this.$message.error(data.msg || '状态码异常');
                 }
 
             } else if (!response.ok) {
 
-                if (response.status == 401) {
-                    location.href = config.LOGIN_URL + '?ReturnURL=' + location.href;
-                }
-
                 if (response.status > 400 && response.status < 500) {
-                    _this && _this.$message.warning('请求方式或参数出现异常');
+                    _this && _this.$message.error('请求方式或参数出现异常');
                 } else if (response.status >= 500) {
-                    _this && _this.$message.warning('服务器暂时在维护,请稍后重试');
+                    _this && _this.$message.error('服务器暂时在维护，请稍后重试');
                 }
 
             }

@@ -10,10 +10,10 @@
                      :model="form"
                      ref="form"
                      label-width="70px">
-                <el-form-item label="创建时间" prop="startTime" style="margin-right: 0;">
+                <el-form-item label="创建时间" prop="start_time" style="margin-right: 0;">
                     <div style="font-size: 0;">
                         <el-date-picker
-                            v-model="form.startTime"
+                            v-model="form.start_time"
                             type="datetime"
                             :editable="false"
                             :picker-options="pickerOptions"
@@ -25,9 +25,9 @@
                     </div>
                 </el-form-item>
 
-                <el-form-item label="" label-width="0px" prop="endTime">
+                <el-form-item label="" label-width="0px" prop="end_time">
                     <el-date-picker
-                        v-model="form.endTime"
+                        v-model="form.end_time"
                         type="datetime"
                         :editable="false"
                         :picker-options="pickerOptions"
@@ -37,9 +37,9 @@
                     </el-date-picker>
                 </el-form-item>
 
-                <el-form-item label="活动名称" prop="title">
+                <el-form-item label="活动名称" prop="activity_name">
                     <el-input
-                        v-model="form.title"
+                        v-model="form.activity_name"
                         placeholder="请输入项目名称"
                         class="form-input-width">
                     </el-input>
@@ -53,13 +53,17 @@
         </div>
 
         <div class="oh">
-            <el-button class="mb5px" type="info" @click="goToDetail('add')">添加活动</el-button>
+            <el-button
+                class="mb5px"
+                type="primary"
+                @click="openDialog()">
+                添加活动
+            </el-button>
         </div>
         <!--列表-->
         <el-table
             :data="list"
-            border
-            style="width: 100%;">
+            border>
             <el-table-column
                 label="序号"
                 type="index"
@@ -69,29 +73,37 @@
 
             <el-table-column
                 label="活动名称"
-                prop="title"
+                prop="activity_name"
                 min-width="200">
             </el-table-column>
 
             <el-table-column
+                label="创建人"
+                prop="create_name"
+                min-width="100"
+                align="center">
+            </el-table-column>
+
+            <el-table-column
                 label="创建时间"
-                prop="createTime"
-                min-width="150"
+                prop="create_time"
+                min-width="170"
                 align="center">
             </el-table-column>
 
             <el-table-column
                 label="活动描述"
-                prop="desc"
                 min-width="350">
+                <template slot-scope="scope">
+                    {{scope.row.activity_desc || '暂无描述'}}
+                </template>
             </el-table-column>
 
             <el-table-column
                 label="操作"
-                min-width="140"
+                width="200"
                 align="center">
-                <template scope="scope">
-
+                <template slot-scope="scope">
                     <el-button
                         size="small"
                         type="primary"
@@ -101,8 +113,8 @@
 
                     <el-button
                         size="small"
-                        type="primary"
-                        @click="goToDetail('edit', scope.row.activityId)"
+                        type="success"
+                        @click="openDialog(scope.row)"
                         class="ml5px">
                         编辑
                     </el-button>
@@ -125,7 +137,6 @@
                             删除
                         </el-button>
                     </el-popover>
-
                 </template>
             </el-table-column>
         </el-table>
@@ -142,6 +153,59 @@
                 :total="total">
             </el-pagination>
         </div>
+
+        <el-dialog
+            title="添加活动"
+            :visible.sync="dialog.visible"
+            custom-class="activity-dialog-500px">
+            <div class="pl20px pr20px pt10px">
+                <table width="100%">
+                    <tr>
+                        <td width="70"
+                            class="text-right f12px">
+                            活动名称
+                        </td>
+                        <td class="pl10px">
+                            <el-input
+                                placeholder="请输入活动名称"
+                                v-model="dialog.activity_name"
+                                style="width: 300px;">
+                            </el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="70"
+                            class="text-right pt10px f12px">
+                            活动描述
+                        </td>
+                        <td class="pl10px pt10px">
+                            <el-input
+                                type="textarea"
+                                :rows="3"
+                                placeholder="请输入活动描述"
+                                v-model="dialog.activity_desc"
+                                style="width: 300px;">
+                            </el-input>
+                        </td>
+                    </tr>
+                </table>
+
+                <div class="text-center pt20px">
+                    <el-button
+                        type="primary"
+                        style="width: 60px;"
+                        @click="handleSave">
+                        保存
+                    </el-button>
+                    <el-button
+                        type="success"
+                        style="width: 60px;"
+                        @click="closeDialog">
+                        取消
+                    </el-button>
+                </div>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -156,15 +220,22 @@
                 },
 
                 form: {
-                    startTime: undefined,
-                    endTime: undefined,
-                    title: '',
+                    start_time: undefined,
+                    end_time: undefined,
+                    activity_name: '',
                     page: 1,
                     pageSize: 10
                 },
 
-                list: [{}],
-                total: 0
+                list: [],
+                total: 0,
+
+                dialog: {
+                    visible: false,
+                    activity_id: '',
+                    activity_name: '',
+                    activity_desc: ''
+                }
             }
         },
         computed: {
@@ -188,24 +259,20 @@
                     }
                 }
 
-                if (params.startDate) {
-                    params.startDate = params.startDate.format('yyyy-MM-dd HH:mm:ss');
+                if (params.start_time) {
+                    params.start_time = params.start_time.format('yyyy-MM-dd HH:mm:ss');
                 }
 
-                if (params.endDate) {
-                    params.endDate = params.endDate.format('yyyy-MM-dd HH:mm:ss');
+                if (params.end_time) {
+                    params.end_time = params.end_time.format('yyyy-MM-dd HH:mm:ss');
                 }
 
-                params.activityType = _this.activityType;
-
-                _this.$post({
-                    url: '',
+                _this.$get({
+                    url: '/activity/getActivityList',
                     data: params,
                     success: function (res) {
-
-                        _this.list = res.data;
-                        _this.total = res.total;
-
+                        _this.list = res.data.list;
+                        _this.total = res.data.total;
                     }
                 });
             },
@@ -227,11 +294,52 @@
             //隐藏启用、停用提示框
             hidePop: function (index) {
                 this.$refs['p' + index].doClose();
+            },
+
+            openDialog (row) {
+                var _this = this;
+                _this.dialog.visible = true;
+                _this.dialog.activity_id = row ? row.activity_id : '';
+                _this.dialog.activity_name = row ? row.activity_name : '';
+                _this.dialog.activity_desc = row ? row.activity_desc : '';
+            },
+            closeDialog () {
+                this.dialog.visible = false;
+            },
+            handleSave () {
+                var _this = this,
+                    url = _this.dialog.activity_id ? '/activity/update' : '/activity/add';
+
+                try {
+
+                    if (_this.dialog.activity_name === '') {
+                        throw '活动名称不能为空';
+                    }
+
+                } catch (msg) {
+                    _this.$message.error(msg);
+                    return;
+                }
+
+                _this.$post({
+                    url: url,
+                    data: {
+                        activity_id: _this.dialog.activity_id,
+                        activity_name: _this.dialog.activity_name,
+                        activity_desc: _this.dialog.activity_desc
+                    },
+                    success: function (res) {
+                        _this.$message.success('保存成功');
+                        _this.form.page = 1;
+                        _this.search();
+                        _this.closeDialog();
+                    }
+                });
             }
         },
         created: function () {
             var _this = this;
-            //_this.search();
+            _this.search();
         }
     }
 </script>
@@ -239,5 +347,11 @@
 <style scoped>
     .form-input-width{
         width: 150px;
+    }
+</style>
+
+<style>
+    .activity-dialog-500px{
+        width: 500px;
     }
 </style>

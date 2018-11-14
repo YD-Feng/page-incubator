@@ -1,7 +1,6 @@
 var path = require('path'),
     webpack = require('webpack'),
     htmlWebpackPlugin = require('html-webpack-plugin'),
-    copyWebpackPlugin = require('copy-webpack-plugin'),
     extractTextPlugin = require('extract-text-webpack-plugin'),
     vue = require('vue-loader');
 
@@ -37,7 +36,7 @@ module.exports = function (options) {
             }),
             //文件单独提取插件
             new extractTextPlugin({
-                filename: options.NODE_ENV == 'production' ? 'css/style.[hash].css' : 'css/style.js?v=[hash]',
+                filename: options.NODE_ENV == 'production' ? 'css/style.[hash].css' : 'css/style.css?v=[hash]',
                 allChunks: true,
                 disable: false
             }),

@@ -4,19 +4,25 @@ var _ = require('underscore'), //引入 underscore
     commonMod = require('./modules/commonMod'),
     //user 模块
     userMod = require('./modules/userMod'),
+    //activity 模块
+    activityMod = require('./modules/activityMod'),
 
     //路由配置
     config = {
         get: {
             '/common/image': commonMod.image,
             '/user/logout': userMod.logout,
-            '/user/list': userMod.getUserList,
-            '/user/status': userMod.checkStatus
+            '/user/getUserList': userMod.getUserList,
+            '/user/checkStatus': userMod.checkStatus,
+            '/user/getUserGroupList': userMod.getUserGroupList,
+            '/activity/getActivityList': activityMod.getActivityList
         },
         post: {
             '/common/imageUpload': commonMod.imageUpload,
             '/user/login': userMod.login,
-            '/user/save': userMod.save
+            '/user/add': userMod.save,
+            '/activity/add': activityMod.save,
+            '/activity/update': activityMod.save
         }
     };
 

@@ -39,7 +39,7 @@ Date.prototype.format = function (fmt) {
 
 var pickerOptShortcuts = [
     {
-        text: '00:00:00',
+        text: '　00:00:00',
         onClick: function (vm) {
             vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
             vm.userInputTime = '00:00:00';
@@ -49,7 +49,7 @@ var pickerOptShortcuts = [
         }
     },
     {
-        text: '23:59:59',
+        text: '　23:59:59',
         onClick: function (vm) {
             vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
             vm.userInputTime = '23:59:59';
@@ -59,7 +59,7 @@ var pickerOptShortcuts = [
         }
     },
     {
-        text: '10:00:00',
+        text: '　10:00:00',
         onClick: function (vm) {
             vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
             vm.userInputTime = '10:00:00';
@@ -69,7 +69,7 @@ var pickerOptShortcuts = [
         }
     },
     {
-        text: '12:00:00',
+        text: '　12:00:00',
         onClick: function (vm) {
             vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
             vm.userInputTime = '12:00:00';
@@ -79,7 +79,7 @@ var pickerOptShortcuts = [
         }
     },
     {
-        text: '14:00:00',
+        text: '　14:00:00',
         onClick: function (vm) {
             vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
             vm.userInputTime = '14:00:00';
@@ -89,7 +89,7 @@ var pickerOptShortcuts = [
         }
     },
     {
-        text: '17:00:00',
+        text: '　17:00:00',
         onClick: function (vm) {
             vm.userInputDate = vm.visibleDate || new Date().format(vm.dateFormat);
             vm.userInputTime = '17:00:00';

@@ -8,19 +8,23 @@ module.exports = {
         var sendData = null;
 
         userSrv.check({
-            userName: req.body.userName,
+            user_name: req.body.user_name,
             password: req.body.password
         }, function (result) {
 
             if (result.length > 0) {
 
-                var token = crypto.createHash('md5').update(result[0].id.toString()).digest('hex');
+                var token = crypto.createHash('md5').update(result[0].user_id.toString()).digest('hex');
 
-                res.cookie('userId', result[0].id, {
+                res.cookie('user_id', result[0].user_id, {
                     maxAge: 6 * 60 * 60 * 1000/*,
                     domain: '.ofc_admin.com'*/
                 });
-                res.cookie('userName', result[0].user_name, {
+                res.cookie('user_name', result[0].user_name, {
+                    maxAge: 6 * 60 * 60 * 1000/*,
+                    domain: '.ofc_admin.com'*/
+                });
+                res.cookie('nick_name', result[0].nick_name, {
                     maxAge: 6 * 60 * 60 * 1000/*,
                     domain: '.ofc_admin.com'*/
                 });
@@ -30,23 +34,21 @@ module.exports = {
                 });
 
                 //用户ID存入session
-                req.session.userId = result[0].id;
+                req.session.user_id = result[0].user_id;
 
-                sendData = {
+                res.send({
                     code: apiCode.success,
                     data: result[0],
-                    msg: '登录成功！'
-                };
-                res.send(sendData);
+                    msg: '登录成功'
+                });
 
             } else {
 
-                sendData = {
+                res.send({
                     code: apiCode.loginErr,
                     data: result,
-                    msg: '登录失败，用户名或密码错误！'
-                };
-                res.send(sendData);
+                    msg: '登录失败，用户名或密码错误'
+                });
 
             }
         });
@@ -54,23 +56,23 @@ module.exports = {
 
     //用户退出登录
     logout: function (req, res) {
-        res.clearCookie('userId', {
+        res.clearCookie('user_id', {
             //domain: '.ofc_admin.com'
         });
-        res.clearCookie('userName', {
+        res.clearCookie('user_name', {
             //domain: '.ofc_admin.com'
         });
-        res.clearCookie('userToken', {
+        res.clearCookie('user_token', {
             //domain: '.ofc_admin.com'
         });
 
         //清除session
-        req.sessionStore.destroy(req.session.id, function (err) {
+        req.sessionStore.destroy(req.session.user_id, function (err) {
             if (err) throw err;
             res.send({
                 code: apiCode.success,
                 data: null,
-                msg: '退出登录成功！'
+                msg: '退出登录成功'
             });
         });
     },
@@ -96,9 +98,7 @@ module.exports = {
                 data: {
                     status: 1,
                     statusDec: '用户已登录',
-                    userName: req.cookies.userName,
-                    userRealName: req.cookies.userRealName,
-                    userNickName: req.cookies.userNickName
+                    user_name: req.cookies.user_name
                 },
                 msg: ''
             }
@@ -108,72 +108,33 @@ module.exports = {
                 data: {
                     status: 0,
                     statusDec: '用户未登录',
-                    userName: '',
-                    userRealName: '',
-                    userNickName: ''
+                    user_name: '',
                 },
                 msg: ''
             }
         }
 
         if (req.query.callback) {
-            var sendStr = req.query.callback + '(' + JSON.stringify(result) + ');';
-            res.send(sendStr);
+            res.jsonp(result);
         } else {
             res.send(result);
         }
     },
 
-    //保存用户信息
+    //新增用户
     save: function (req, res) {
-        var password = crypto.createHash('md5').update(req.body.password).digest('hex'),
-            code = 1,
-            msg = '',
-            sendData = null;
-
-        if (req.body.userName == '') {
-            code = 0;
-            msg = '用户名不能为空！';
-        } else if (
-            (typeof req.body.id == 'undefined' || (typeof req.body.id != 'undefined' && req.body.id == '')) &&
-            req.body.password == ''
-        ) {
-            code = 0;
-            msg = '密码不能为空！';
-        } else if (req.body.userRealName == '') {
-            code = 0;
-            msg = '用户实名不能为空！';
-        } else if (req.body.userNickName == '') {
-            code = 0;
-            msg = '用户花名不能为空！';
-        } else if (req.body.userJobNumber == '') {
-            code = 0;
-            msg = '工号不能为空！';
-        }
-
-        if (code == 0) {
-            sendData = {
-                code: code,
-                data: null,
-                msg: msg
-            };
-            res.send(sendData);
-            return;
-        }
-
         userSrv.checkUserName({
-            id: req.body.id,
-            userName: req.body.userName
+            user_id: req.body.user_id,
+            user_name: req.body.user_name
         }, function (result) {
             if (result.length > 0) {
 
                 //用户名已被使用
-                sendData = {
-                    code: 9999,
+                res.send({
+                    code: apiCode.logicErr,
                     data: null,
-                    msg: '操作失败，用户名已存在！'
-                };
-                res.send(sendData);
+                    msg: '操作失败，用户名已存在'
+                });
 
             } else {
                 //用户名未被使用
@@ -183,36 +144,39 @@ module.exports = {
 
         function saveUserMsg (req, res) {
             userSrv.save({
-                id: req.body.id || '',
-                userName: req.body.userName,
+                user_id: req.body.user_id || '',
+                user_name: req.body.user_name,
                 password: password,
-                identityId: req.body.identityId,
-                userRealName: req.body.userRealName,
-                userNickName: req.body.userNickName,
-                userJobNumber: req.body.userJobNumber
+                group_id: req.body.group_id,
+                nick_name: req.body.nick_name
             }, function (result) {
 
                 if (result.affectedRows > 0) {
-
-                    sendData = {
+                    res.send({
                         code: apiCode.success,
                         data: result,
-                        msg: '操作成功！'
-                    };
-
+                        msg: '操作成功'
+                    });
                 } else {
-
-                    sendData = {
+                    res.send({
                         code: apiCode.dataBaseErr,
                         data: result,
-                        msg: '操作失败！'
-                    };
-
+                        msg: '操作失败'
+                    });
                 }
-
-                res.send(sendData);
 
             });
         }
+    },
+
+    //获取用户分组列表
+    getUserGroupList: function (req, res) {
+        userSrv.getUserGroupList(function (result) {
+            res.send({
+                code: apiCode.success,
+                data: result,
+                msg: ''
+            });
+        });
     }
 };
