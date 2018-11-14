@@ -31,9 +31,10 @@
 待开发完成后补贴出来...<br>
 
 # 部署步骤
-1.搭建 mySQL 数据库
-2.修改项目根目录下 config/dataBase.js 里数据库相关配置
-3.执行数据库脚本
-4.进入项目的 static 目录，在该目录下执行 gulp build
-5.在项目根目录下执行 npm run start
-6.打开浏览器，访问 http://127.0.0.1:3000，看到登录界面，部署完成
+1.搭建 mySQL 数据库<br>
+2.修改项目根目录下 config/dataBase.js 里数据库相关配置<br>
+3.执行数据库脚本<br>
+4.进入项目的 static 目录，在该目录下执行 gulp build<br>
+5.在项目根目录下执行 npm run start<br>
+6.打开浏览器，访问 http://127.0.0.1:3000<br>
+看到登录界面，说明部署完成<br>
