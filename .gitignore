@@ -4,3 +4,4 @@
 /static/.idea
 /static/node_modules
 /logs
+/npm-debug.log
