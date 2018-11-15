@@ -13,9 +13,28 @@ module.exports = {
         });
     },
 
+    //获取活动详情
+    getActivityDetail: function (req, res) {
+        activitySrv.getActivityDetail(req.query, function (result) {
+            if (result.length > 0) {
+                res.send({
+                    code: apiCode.success,
+                    data: result[0],
+                    msg: ''
+                });
+            } else {
+                res.send({
+                    code: apiCode.noDataErr,
+                    data: result,
+                    msg: '没有找到该活动'
+                });
+            }
+        });
+    },
+
     //保存活动信息
-    save: function (req, res) {
-        activitySrv.save({
+    saveActivity: function (req, res) {
+        activitySrv.saveActivity({
             activity_id: req.body.activity_id,
             activity_name: req.body.activity_name,
             activity_desc: req.body.activity_desc,
@@ -40,8 +59,8 @@ module.exports = {
     },
 
     //删除活动
-    del: function (req, res) {
-        activitySrv.del({
+    delActivity: function (req, res) {
+        activitySrv.delActivity({
             activity_id: req.body.activity_id
         }, function (result) {
 

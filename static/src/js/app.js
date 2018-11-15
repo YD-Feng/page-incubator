@@ -45,7 +45,7 @@ router.beforeEach(function (to, from, next) {
 //实例化 store
 var store = new Vuex.Store({
     modules: {
-        flags: require('./store/flags'),
+        area: require('./store/area'),
         dict: require('./store/dict')
     },
     strict: false,

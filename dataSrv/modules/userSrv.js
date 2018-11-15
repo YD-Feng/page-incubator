@@ -54,11 +54,11 @@ module.exports = {
                 opts.pageSize = 30;
             }
 
-            if (!opts.currentPage) {
-                opts.currentPage = 1;
+            if (!opts.page) {
+                opts.page = 1;
             }
 
-            str = ' order by id limit ' + (opts.pageSize * (opts.currentPage - 1)) + ',' + opts.pageSize;
+            str = ' order by id limit ' + (opts.pageSize * (opts.page - 1)) + ',' + opts.pageSize;
 
             listSQL += str;
 
@@ -69,7 +69,7 @@ module.exports = {
                     if (err) throw err;
                     callback({
                         totalCount: countResult[0]['count(*)'],
-                        currentPage: opts.currentPage,
+                        page: opts.page,
                         pageSize: opts.pageSize,
                         list: listResult
                     });

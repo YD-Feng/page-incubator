@@ -54,10 +54,10 @@
 
         <div class="oh">
             <el-button
-                class="mb5px"
+                class="mb10px"
                 type="primary"
                 @click="openDialog()">
-                添加活动
+                创建活动
             </el-button>
         </div>
         <!--列表-->
@@ -122,7 +122,7 @@
                     <el-popover :ref="'p' + scope.$index" placement="top">
                         <p class="lh40px pt5px pb5px">
                             <i class="el-icon-information cm-text-orange mr5px"></i>
-                            请问确定要删除活动吗？
+                            请问确定要删除此活动吗？
                         </p>
                         <div class="text-center">
                             <el-button type="primary" size="small" @click="handleDelActivity(scope.$index, scope.row)">确定</el-button>
@@ -148,14 +148,14 @@
                 @current-change="handleCurrentChange"
                 :current-page="form.page"
                 :page-sizes="[10, 20, 50, 100]"
-                :page-size="form.pageSize"
+                :page-size="form.page_size"
                 layout="total, sizes, prev, pager, next, jumper"
                 :total="total">
             </el-pagination>
         </div>
 
         <el-dialog
-            title="添加活动"
+            title="创建活动"
             :visible.sync="dialog.visible"
             custom-class="activity-dialog-500px">
             <div class="pl20px pr20px pt10px">
@@ -225,7 +225,7 @@
                     end_time: undefined,
                     activity_name: '',
                     page: 1,
-                    pageSize: 10
+                    page_size: 10
                 },
 
                 list: [],
@@ -237,16 +237,6 @@
                     activity_name: '',
                     activity_desc: ''
                 }
-            }
-        },
-        computed: {
-            dict () {
-                return this.$store.state.dict.activity;
-            }
-        },
-        watch: {
-            refreshListFlag () {
-                this.search();
             }
         },
         methods: {
@@ -279,7 +269,7 @@
             },
             handleSizeChange (val) {
                 var _this = this;
-                _this.form.pageSize = val;
+                _this.form.page_size = val;
                 _this.form.page = 1;
                 _this.search();
             },
@@ -330,11 +320,13 @@
                 try {
 
                     if (_this.dialog.activity_name === '') {
-                        throw '活动名称不能为空';
+                        throw {message: '活动名称不能为空'};
+                    } else if (_this.dialog.activity_name.length > 15) {
+                        throw {message: '活动名称不能超过15个字符'};
                     }
 
-                } catch (msg) {
-                    _this.$message.error(msg);
+                } catch (err) {
+                    _this.$message.error(err.message);
                     return;
                 }
 
@@ -356,10 +348,7 @@
 
             goToManagePage (row) {
                 this.$router.push({
-                    path: '/activityPageList/' + row.activity_id,
-                    query: {
-                        activity_name: row.activity_name
-                    }
+                    path: '/activityPageList/' + row.activity_id
                 });
             }
         },

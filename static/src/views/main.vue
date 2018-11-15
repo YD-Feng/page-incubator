@@ -102,8 +102,22 @@
                             path: '/login'
                         });
                     }
-                })
+                });
+            },
+
+            getAreaList () {
+                var _this = this;
+
+                _this.$get({
+                    url: '/area/getAreaList',
+                    success: function (res) {
+                        _this.$store.commit('setAreaList', res.data);
+                    }
+                });
             }
+        },
+        created () {
+            this.getAreaList();
         }
     };
 </script>
