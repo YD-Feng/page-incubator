@@ -25,6 +25,15 @@ module.exports = [
                         resolve(require('./../views/activityPageList/main.vue'));
                     }, 'activityPageList');
                 }
+            },
+            {
+                path: 'activityPageDetail/:pageId?',
+                name: 'activityPageDetail',
+                component: function (resolve) {
+                    require.ensure(['./../views/activityPageDetail/main.vue'], function (require) {
+                        resolve(require('./../views/activityPageDetail/main.vue'));
+                    }, 'activityPageDetail');
+                }
             }
         ]
     },

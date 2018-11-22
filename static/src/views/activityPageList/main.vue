@@ -10,7 +10,7 @@
                 class="btn-back"
                 type="default"
                 @click="goBack">
-                返回&gt;&gt;
+                返回&nbsp;&gt;&gt;
             </el-button>
         </div>
 
@@ -27,6 +27,13 @@
                 type="success"
                 @click="openPageDialog()">
                 创建页面
+            </el-button>
+
+            <el-button
+                class="mb10px"
+                type="warning"
+                @click="handleExportPage()">
+                导出页面文件
             </el-button>
 
             <div class="fr lh40px f14px">
@@ -95,17 +102,17 @@
                     <el-button
                         size="small"
                         type="primary"
-                        @click="openPageDialog(scope.row)"
+                        @click="goToDetail(scope.row)"
                         class="ml5px">
-                        克隆页面
+                        编辑
                     </el-button>
 
                     <el-button
                         size="small"
                         type="success"
-                        @click="goToDetail(scope.row)"
+                        @click="openPageDialog(scope.row)"
                         class="ml5px">
-                        编辑
+                        克隆页面
                     </el-button>
 
                     <el-popover :ref="'p' + scope.$index" placement="top">
@@ -558,6 +565,23 @@
                         activity_id: _this.form.activity_id,
                         area_id: _this.pageDialog.area_id,
                         setting: _this.pageDialog.setting
+                    },
+                    success: function (res) {
+                        _this.$message.success('保存成功');
+                        _this.form.page = 1;
+                        _this.getPageList();
+                        _this.closeDialog();
+                    }
+                });
+            },
+
+            handleExportPage () {
+                var _this = this;
+
+                _this.$post({
+                    url: '/activityPage/export',
+                    data: {
+                        activity_id: _this.form.activity_id
                     },
                     success: function (res) {
                         _this.$message.success('保存成功');

@@ -1,7 +1,7 @@
-var userApiConf = require('./modules/user'),
-    activityApiConf = require('./modules/activity'),
-    activityPageApiConf = require('./modules/activityPage'),
-    areaApiConf = require('./modules/area'),
+var userConf = require('./modules/userConf'),
+    activityConf = require('./modules/activityConf'),
+    activityPageConf = require('./modules/activityPageConf'),
+    areaConf = require('./modules/areaConf'),
 
     //接口校验配置
     validateConfig = {
@@ -12,20 +12,21 @@ var userApiConf = require('./modules/user'),
             '/user/status'
         ],
 
-        '/user/add': userApiConf.add,
+        '/user/add': userConf.add,
 
-        '/activity/add': activityApiConf.add,
-        '/activity/update': activityApiConf.update,
-        '/activity/del': activityApiConf.del,
+        '/activity/add': activityConf.add,
+        '/activity/update': activityConf.update,
+        '/activity/del': activityConf.del,
 
-        '/activityPage/getActivityPageList': activityPageApiConf.getActivityPageList,
-        '/activityPage/add': activityPageApiConf.add,
-        '/activityPage/update': activityPageApiConf.update,
-        '/activityPage/del': activityPageApiConf.del,
+        '/activityPage/getActivityPageList': activityPageConf.getActivityPageList,
+        '/activityPage/add': activityPageConf.add,
+        '/activityPage/update': activityPageConf.update,
+        '/activityPage/del': activityPageConf.del,
+        '/activityPage/export': activityPageConf.export,
 
-        '/area/add': areaApiConf.add,
-        '/area/update': areaApiConf.update,
-        '/area/del': areaApiConf.del
+        '/area/add': areaConf.add,
+        '/area/update': areaConf.update,
+        '/area/del': areaConf.del
     };
 
 module.exports = validateConfig;

@@ -1,5 +1,8 @@
 var activityPageSrv = require('../../dataSrv/modules/activityPageSrv'),
-    apiCode = require('../../config/apiCode');
+    apiCode = require('../../config/apiCode'),
+    path = require('path'),
+    fs = require('fs'),
+    _ = require('underscore');
 
 module.exports = {
     //获取活动页面列表
@@ -97,6 +100,43 @@ module.exports = {
                     code: apiCode.dataBaseErr,
                     data: result,
                     msg: '操作失败'
+                });
+            }
+
+        });
+    },
+
+    exportActivityPage: function (req, res) {
+        activityPageSrv.getActivityPageByActivityId({
+            activity_id: req.body.activity_id
+        }, function (result) {
+
+            if (result.length > 0) {
+
+                var tpl = fs.readFileSync(path.resolve(__dirname, '../../files/page-tpl.html'), 'utf-8');
+
+                result.forEach(function (item) {
+                    var setting = item.setting ? JSON.parse(item.setting) : {
+                            pageTitle: item.activity_name,
+                            pageBgColor: '#ffffff',
+                            moduleList: []
+                        },
+                        activityPath = path.resolve(__dirname, '../../files/activity-' + req.body.activity_id),
+                        isPathExists = fs.existsSync(activityPath);
+
+                    if (!isPathExists) {
+                        fs.mkdirSync(activityPath);
+                    }
+
+                    var content = _.template(tpl)(setting);
+                    fs.writeFileSync(activityPath + '/' + item.area_code + '.html', content);
+                });
+
+            } else {
+                res.send({
+                    code: apiCode.dataBaseErr,
+                    data: result,
+                    msg: '导出失败'
                 });
             }
 

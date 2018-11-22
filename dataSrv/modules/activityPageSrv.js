@@ -46,7 +46,26 @@ module.exports = {
     //获取活动页面详情
     getActivityPageDetail: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
-            var SQL = 'select * , date_format(create_time, "%Y-%m-%d %T") as create_time from activity_page where activity_id = ' + connPool.escape(opts.activity_id);
+            var SQL = 'select * , date_format(create_time, "%Y-%m-%d %T") as create_time' +
+                ' , date_format(last_update_time, "%Y-%m-%d %T") as last_update_time' +
+                ' from activity_page where page_id = ' + connPool.escape(opts.page_id);
+
+            connection.query(SQL, function (err, result) {
+                if (err) throw err;
+                callback(result);
+                connection.release();//释放链接
+            });
+        });
+    },
+
+    //查找某活动的所有活动页面
+    getActivityPageByActivityId: function (opts, callback) {
+        connPool.getConnection(function (err, connection) {
+            var SQL = 'select activity_page.setting, area.area_name, area.area_code, activity.activity_name' +
+                ' from activity_page' +
+                ' inner join area on activity_page.area_id = area.area_id' +
+                ' inner join activity on activity_page.activity_id = activity.activity_id' +
+                ' where activity_page.activity_id = ' + connPool.escape(opts.activity_id);
 
             connection.query(SQL, function (err, result) {
                 if (err) throw err;
@@ -84,9 +103,7 @@ module.exports = {
                 arr.push('last_update_time = getdate()');
 
                 SQL = 'update activity_page set ' + arr.join(',') +
-                    ' where page_id = ' + connPool.escape(opts.page_id) +
-                    ' and activity_id = ' + connPool.escape(opts.activity_id) +
-                    ' and area_id = ' + connPool.escape(opts.area_id);
+                    ' where page_id = ' + connPool.escape(opts.page_id);
 
                 connection.query(SQL, function (err, result) {
                     if (err) throw err;
