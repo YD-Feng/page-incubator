@@ -104,11 +104,13 @@
 
 <style>
     .color-setter .el-color-picker {
-        vertical-align: top;
+        vertical-align: bottom;
+        height: 30px;
     }
     .color-setter .el-color-picker__trigger {
         height: 30px;
         padding-top: 3px;
+        background-color: #ffffff;
     }
     .color-setter .color-block {
         border:1px solid #ccc;

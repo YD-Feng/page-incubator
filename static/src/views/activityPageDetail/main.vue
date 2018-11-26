@@ -68,6 +68,31 @@
                                             </div>
                                         </div>
 
+                                        <div v-if="module.moduleType == 'floorMenu'"
+                                             class="menu-module"
+                                             :style="{backgroundColor: module.menuBgColor, color: module.menuFontColor}">
+                                            <ul class="oh"
+                                                :style="{backgroundColor: module.menuBgColor, color: module.menuFontColor}">
+                                                <li class="menu-item current"
+                                                    :style="{color: module.menuCurColor}">
+                                                    楼层名称A
+                                                    <div class="line"
+                                                         :style="{backgroundColor: module.menuCurColor}">
+                                                    </div>
+                                                </li>
+                                                <li class="menu-item">
+                                                    楼层名称B
+                                                    <div class="line"></div>
+                                                </li>
+                                                <li class="menu-item">
+                                                    楼层名称C
+                                                    <div class="line"></div>
+                                                </li>
+                                            </ul>
+
+                                            <i class="btn icon-font icon-you1"></i>
+                                        </div>
+
                                         <div class="banner-module" v-if="module.moduleType == 'slideBanner'">
                                             <ul :style="{left: curBannerIndex * (-100) + '%'}">
                                                 <li v-for="(item, $index) in module.bannerList"
@@ -129,7 +154,7 @@
                     </color-setter>
                 </div>
 
-                <ul>
+                <ul class="mt10px">
                     <li class="module-item"
                         :class="{'module-item-close': curModuleIndex != index}"
                         v-for="(item, index) in moduleList"
@@ -165,6 +190,39 @@
                                         v-model="item.bgImg"
                                         style="width: 206px;">
                                     </el-input>
+                                </td>
+                            </tr>
+
+                            <tr v-show="item.moduleType == 'floorMenu'">
+                                <td class="pb10px lh30px">
+                                    菜单字体颜色：
+                                    <color-setter
+                                        v-model="item.menuFontColor"
+                                        :colorListVisible="false"
+                                        style="display: inline-block">
+                                    </color-setter>
+                                </td>
+                            </tr>
+
+                            <tr v-show="item.moduleType == 'floorMenu'">
+                                <td class="pb10px lh30px">
+                                    高亮字体颜色：
+                                    <color-setter
+                                        v-model="item.menuCurColor"
+                                        :colorListVisible="false"
+                                        style="display: inline-block">
+                                    </color-setter>
+                                </td>
+                            </tr>
+
+                            <tr v-show="item.moduleType == 'floorMenu'">
+                                <td class="pb10px lh30px">
+                                    菜单背景颜色：
+                                    <color-setter
+                                        v-model="item.menuBgColor"
+                                        :colorListVisible="false"
+                                        style="display: inline-block">
+                                    </color-setter>
                                 </td>
                             </tr>
                         </table>
@@ -469,6 +527,33 @@
                     </el-button>
                 </div>
 
+                <!--楼层菜单-->
+                <div v-if="curModule && curModule.moduleType == 'floorMenu'">
+                    <div class="menu-module"
+                         :style="{backgroundColor: curModule.menuBgColor, color: curModule.menuFontColor}">
+                        <ul class="oh"
+                            :style="{backgroundColor: curModule.menuBgColor, color: curModule.menuFontColor}">
+                            <li class="menu-item current"
+                                :style="{color: curModule.menuCurColor}">
+                                楼层名称A
+                                <div class="line"
+                                     :style="{backgroundColor: curModule.menuCurColor}">
+                                </div>
+                            </li>
+                            <li class="menu-item">
+                                楼层名称B
+                                <div class="line"></div>
+                            </li>
+                            <li class="menu-item">
+                                楼层名称C
+                                <div class="line"></div>
+                            </li>
+                        </ul>
+
+                        <i class="btn icon-font icon-you1"></i>
+                    </div>
+                </div>
+
                 <!--滑动Banner-->
                 <div v-if="curModule && curModule.moduleType == 'slideBanner'">
                     <div class="banner-module">
@@ -606,6 +691,9 @@
     var defaultModule = JSON.stringify({
         moduleType: 'simple',
         bgImg: '',
+        menuFontColor: '#ffffff',
+        menuCurColor: '#f8fb40',
+        menuBgColor: '#2a469c',
         linkList: [],
         floorList: [
             {
@@ -973,6 +1061,20 @@
                                 }
                             });
 
+                        } else if (module.moduleType == 'floorMenu') {
+
+                            if (module.menuFontColor === '') {
+                                throw {message: '菜单字体颜色不能为空'};
+                            }
+
+                            if (module.menuCurColor === '') {
+                                throw {message: '高亮字体颜色不能为空'};
+                            }
+
+                            if (module.menuBgColor === '') {
+                                throw {message: '菜单背景颜色不能为空'};
+                            }
+
                         }
                     });
 
@@ -1328,6 +1430,68 @@
         margin: 0 4px;
         width: 6px;
         height: 6px;
+    }
+
+    .menu-module{
+        position: relative;
+        padding-right: 32px;
+    }
+    .menu-module .btn{
+        width: 32px;
+        height: 44px;
+        line-height: 44px;
+        position: absolute;
+        right: 0;
+        top: 0;
+        text-align: center;
+        font-size: 22px;
+    }
+    .menu-module .menu-item{
+        height: 44px;
+        line-height: 44px;
+        font-size: 18px;
+        float: left;
+        padding: 0 12px;
+        text-align:center;
+        position: relative;
+    }
+    .menu-module .current{
+        color: #ff3333;
+    }
+    .menu-module .line{
+        display: none;
+    }
+    .menu-module .current .line{
+        display: block;
+        position: absolute;
+        left: 9px;
+        right: 9px;
+        bottom: 0;
+        height: 2px;
+        background-color: #ff3333;
+        overflow: hidden;
+    }
+    .preview-wrap .menu-module{
+        padding-right: 23px;
+        margin-bottom: 4px;
+    }
+    .preview-wrap .menu-module .btn{
+        width: 23px;
+        height: 32px;
+        line-height: 32px;
+        font-size: 16px;
+    }
+    .preview-wrap .menu-item{
+        height: 32px;
+        line-height: 32px;
+        font-size: 13px;
+        padding: 0 9px;
+    }
+    .preview-wrap .menu-module .current .line{
+        left: 6px;
+        right: 6px;
+        height: 1px;
+        overflow: hidden;
     }
 
     .no-data{
