@@ -202,9 +202,10 @@
         <el-dialog
             title="区域管理"
             :visible.sync="areaDialog.visible"
-            custom-class="activity-page-dialog-500px">
+            custom-class="activity-page-dialog-720px">
             <!--列表-->
             <el-table
+                ref="areaTable"
                 :data="areaDialog.areaList"
                 max-height="400"
                 border>
@@ -227,7 +228,7 @@
 
                 <el-table-column
                     label="区域编码"
-                    min-width="135"
+                    min-width="130"
                     align="center">
                     <template slot-scope="scope">
                         <el-input
@@ -238,6 +239,40 @@
 
                         <span v-else class="lh30px">
                             {{scope.row.area_code}}
+                        </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="测试账号"
+                    min-width="130"
+                    align="center">
+                    <template slot-scope="scope">
+                        <el-input
+                            v-if="scope.row.is_edit"
+                            v-model="scope.row.test_user_sp"
+                            style="width: 100px;">
+                        </el-input>
+
+                        <span v-else class="lh30px">
+                            {{scope.row.test_user}}
+                        </span>
+                    </template>
+                </el-table-column>
+
+                <el-table-column
+                    label="测试账号密码"
+                    min-width="130"
+                    align="center">
+                    <template slot-scope="scope">
+                        <el-input
+                            v-if="scope.row.is_edit"
+                            v-model="scope.row.test_password_sp"
+                            style="width: 100px;">
+                        </el-input>
+
+                        <span v-else class="lh30px">
+                            {{scope.row.test_password}}
                         </span>
                     </template>
                 </el-table-column>
@@ -413,6 +448,9 @@
                         var obj = Object.assign({}, item);
                         obj.area_name_sp = obj.area_name;
                         obj.area_code_sp = obj.area_code;
+                        obj.test_user_sp = obj.test_user;
+                        obj.test_password_sp = obj.test_password;
+
                         obj.is_edit = false;
                         return obj;
                     });
@@ -447,8 +485,12 @@
                     area_code: '',
                     area_name_sp: '',
                     area_code_sp: '',
+                    test_user_sp: '',
+                    test_password_sp: '',
                     is_edit: true
                 });
+
+                this.$refs.areaTable.$refs.bodyWrapper.scrollTop = 0;
             },
             handleDelArea (row) {
                 var _this = this;
@@ -480,7 +522,8 @@
                 });
             },
             handleSaveArea (row) {
-                var _this = this;
+                var _this = this,
+                    mobileReg = /^(13[0-9]|14[579]|15[0-3,5-9]|16[6]|17[0135678]|18[0-9]|19[89])\d{8}$/;
 
                 try {
 
@@ -496,6 +539,18 @@
                         throw {message: '区域编码最多只能输入5个字符'};
                     }
 
+                    if (row.test_user_sp === '') {
+                        throw {message: '请输入测试账号'};
+                    } else if ( !(mobileReg.test(row.test_user_sp)) ) {
+                        throw {message: '无效手机号码'};
+                    }
+
+                    if (row.test_password_sp === '') {
+                        throw {message: '请输入测试账号密码'};
+                    } else if (row.test_password_sp.length > 15) {
+                        throw {message: '测试账号密码最多只能输入15个字符'};
+                    }
+
                 } catch (err) {
                     _this.$message.error(err.message);
                     return;
@@ -506,7 +561,9 @@
                     data: {
                         area_id: row.area_id,
                         area_name: row.area_name_sp,
-                        area_code: row.area_code_sp
+                        area_code: row.area_code_sp,
+                        test_user: row.test_user_sp,
+                        test_password: row.test_password_sp,
                     },
                     success: function (res) {
                         _this.$message.success('保存成功');
@@ -514,6 +571,8 @@
                         row.is_edit = false;
                         row.area_name = row.area_name_sp;
                         row.area_code = row.area_code_sp;
+                        row.test_user = row.test_user_sp;
+                        row.test_password = row.test_password_sp;
                         if (!row.area_id) {
                             row.area_id = res.data.insertId;
                         }
@@ -530,6 +589,8 @@
                     row.is_edit = false;
                     row.area_name_sp = row.area_name;
                     row.area_code_sp = row.area_code;
+                    row.test_user_sp = row.test_user;
+                    row.test_password_sp = row.test_password;
                 } else {
                     _this.areaDialog.areaList.splice(index, 1);
                 }
@@ -578,16 +639,11 @@
             handleExportPage () {
                 var _this = this;
 
-                _this.$post({
+                _this.$exportByForm({
+                    method: 'post',
                     url: '/activityPage/export',
                     data: {
                         activity_id: _this.form.activity_id
-                    },
-                    success: function (res) {
-                        _this.$message.success('保存成功');
-                        _this.form.page = 1;
-                        _this.getPageList();
-                        _this.closeDialog();
                     }
                 });
             },
@@ -620,10 +676,10 @@
     .activity-page-dialog-300px{
         width: 300px;
     }
-    .activity-page-dialog-500px{
-        width: 500px;
+    .activity-page-dialog-720px{
+        width: 720px;
     }
-    .activity-page-dialog-500px .el-input__inner{
+    .activity-page-dialog-720px .el-input__inner{
         text-align: center;
     }
 </style>

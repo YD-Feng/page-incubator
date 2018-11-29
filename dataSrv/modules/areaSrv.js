@@ -25,6 +25,8 @@ module.exports = {
 
                 arr.push('area_name = ' + connPool.escape(opts.area_name));
                 arr.push('area_code = ' + connPool.escape(opts.area_code));
+                arr.push('test_user = ' + connPool.escape(opts.test_user));
+                arr.push('test_password = ' + connPool.escape(opts.test_password));
 
                 SQL = 'update area set ' + arr.join(',') + ' where area_id = ' + connPool.escape(opts.area_id);
 
@@ -36,10 +38,12 @@ module.exports = {
 
             } else {
                 //没传入ID，则新增
-                var SQL = 'insert into area (area_name, area_code) ',
+                var SQL = 'insert into area (area_name, area_code, test_user, test_password) ',
                     values = [
                         connPool.escape(opts.area_name),
-                        connPool.escape(opts.area_code)
+                        connPool.escape(opts.area_code),
+                        connPool.escape(opts.test_user),
+                        connPool.escape(opts.test_password)
                     ];
 
                 SQL += 'values(' + values.join(',') + ')';

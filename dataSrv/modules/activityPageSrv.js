@@ -61,7 +61,7 @@ module.exports = {
     //查找某活动的所有活动页面
     getActivityPageByActivityId: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
-            var SQL = 'select activity_page.setting, area.area_name, area.area_code, activity.activity_name' +
+            var SQL = 'select activity_page.setting, area.area_name, area.area_code, area.test_user, area.test_password, activity.activity_name, activity.folder' +
                 ' from activity_page' +
                 ' inner join area on activity_page.area_id = area.area_id' +
                 ' inner join activity on activity_page.activity_id = activity.activity_id' +
@@ -100,7 +100,7 @@ module.exports = {
                 //校验中间件已校验的必传字段，无须判断
                 arr.push('setting = ' + connPool.escape(opts.setting));
                 arr.push('last_update_name = ' + connPool.escape(opts.operator));
-                arr.push('last_update_time = getdate()');
+                arr.push('last_update_time = now()');
 
                 SQL = 'update activity_page set ' + arr.join(',') +
                     ' where page_id = ' + connPool.escape(opts.page_id);

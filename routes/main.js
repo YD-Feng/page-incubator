@@ -42,7 +42,7 @@ var _ = require('underscore'), //引入 underscore
             '/activityPage/add': activityPageMod.saveActivityPage,
             '/activityPage/update': activityPageMod.saveActivityPage,
             '/activityPage/del': activityPageMod.delActivityPage,
-            '/activityPage/export':  activityPageMod.exportActivityPage,
+            '/activityPage/export': activityPageMod.exportActivityPage,
 
             '/area/add': areaMod.saveArea,
             '/area/update': areaMod.saveArea,

@@ -92,8 +92,14 @@
             </el-table-column>
 
             <el-table-column
+                label="页面目录"
+                prop="folder"
+                min-width="180">
+            </el-table-column>
+
+            <el-table-column
                 label="活动描述"
-                min-width="350">
+                min-width="270">
                 <template slot-scope="scope">
                     {{scope.row.activity_desc || '暂无描述'}}
                 </template>
@@ -175,6 +181,19 @@
                     </tr>
                     <tr>
                         <td width="70"
+                            class="text-right f12px lh30px pt10px">
+                            页面目录
+                        </td>
+                        <td valign="top" class="pl10px pt10px">
+                            <el-input
+                                placeholder="请输入活动名称"
+                                v-model="dialog.folder"
+                                style="width: 300px;">
+                            </el-input>
+                        </td>
+                    </tr>
+                    <tr>
+                        <td width="70"
                             valign="top"
                             class="text-right pt10px f12px lh30px">
                             活动描述
@@ -235,6 +254,7 @@
                     visible: false,
                     activity_id: '',
                     activity_name: '',
+                    folder: '',
                     activity_desc: ''
                 }
             }
@@ -308,6 +328,7 @@
                 _this.dialog.visible = true;
                 _this.dialog.activity_id = row ? row.activity_id : '';
                 _this.dialog.activity_name = row ? row.activity_name : '';
+                _this.dialog.folder = row ? row.folder : '';
                 _this.dialog.activity_desc = row ? row.activity_desc : '';
             },
             closeDialog () {
@@ -325,6 +346,10 @@
                         throw {message: '活动名称不能超过15个字符'};
                     }
 
+                    if (_this.dialog.folder === '') {
+                        throw {message: '页面目录不能为空'};
+                    }
+
                 } catch (err) {
                     _this.$message.error(err.message);
                     return;
@@ -335,6 +360,7 @@
                     data: {
                         activity_id: _this.dialog.activity_id,
                         activity_name: _this.dialog.activity_name,
+                        folder: _this.dialog.folder,
                         activity_desc: _this.dialog.activity_desc
                     },
                     success: function (res) {

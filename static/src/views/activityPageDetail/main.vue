@@ -30,9 +30,12 @@
                             <div>
 
                                 <ul>
-                                    <li v-for="module in moduleList">
-                                        <div class="simple-module" v-if="module.moduleType == 'simple'">
-                                            <div class="placeholder" v-if="!module.bgImg">
+                                    <li v-for="(module, moduleIndex) in moduleList">
+                                        <div class="simple-module"
+                                             v-if="module.moduleType == 'simple'"
+                                             @click="handleCurPreview(module, moduleIndex)">
+                                            <div class="placeholder"
+                                                 v-if="!module.bgImg">
                                                 <i class="el-icon-picture-outline cm-text-light"
                                                    style="font-size: 72px;">
                                                 </i>
@@ -46,7 +49,8 @@
 
                                         <div class="floor-module"
                                              v-if="module.moduleType == 'floor' || module.moduleType == 'slideFloor'"
-                                             v-for="floor in module.floorList">
+                                             v-for="(floor, floorIndex) in module.floorList"
+                                             @click="handleCurPreview(module, moduleIndex, floorIndex)">
                                             <div class="floor-title">
                                                 <div class="placeholder" v-if="!floor.titleImg">
                                                     <i class="el-icon-picture-outline cm-text-light rel"
@@ -70,7 +74,8 @@
 
                                         <div v-if="module.moduleType == 'floorMenu'"
                                              class="menu-module"
-                                             :style="{backgroundColor: module.menuBgColor, color: module.menuFontColor}">
+                                             :style="{backgroundColor: module.menuBgColor, color: module.menuFontColor}"
+                                             @click="handleCurPreview(module, moduleIndex)">
                                             <ul class="oh"
                                                 :style="{backgroundColor: module.menuBgColor, color: module.menuFontColor}">
                                                 <li class="menu-item current"
@@ -93,7 +98,9 @@
                                             <i class="btn icon-font icon-you1"></i>
                                         </div>
 
-                                        <div class="banner-module" v-if="module.moduleType == 'slideBanner'">
+                                        <div class="banner-module"
+                                             v-if="module.moduleType == 'slideBanner'"
+                                             @click="handleCurPreview(module, moduleIndex)">
                                             <ul :style="{left: curBannerIndex * (-100) + '%'}">
                                                 <li v-for="(item, $index) in module.bannerList"
                                                     :key="$index">
@@ -134,7 +141,9 @@
 
             <!--编辑页面模块-->
             <div class="module-manage-wrap">
-                <p class="lh40px f14px fBold">编辑页面</p>
+                <div class="f14px pb10px">
+                    页面所属城市：<span class="cm-text-blue fBold">{{areaName}}</span>
+                </div>
 
                 <div class="f14px pt10px pb5px">
                     页面标题：
@@ -173,6 +182,7 @@
                                         @change="handleModuleTypeChange">
                                         <el-option
                                             v-for="(value, key) in dict.moduleType"
+                                            :disabled="floorModule.index != -1 && floorModule.index != index && (key == 'floor' || key == 'slideFloor')"
                                             :key="key"
                                             :value="key"
                                             :label="value">
@@ -340,7 +350,8 @@
                                         <el-select
                                             v-model="item.linkType"
                                             placeholder="请选择链接类型"
-                                            style="width: 274px;">
+                                            style="width: 274px;"
+                                            @change="handleLinkTypeChange">
                                             <el-option
                                                 v-for="(value, key) in dict.linkType"
                                                 :key="key"
@@ -356,15 +367,8 @@
                                         {{linkTypeValName[item.linkType]}}：
                                     </td>
                                     <td class="pb10px">
-                                        <el-input
-                                            v-if="item.linkType != 'module'"
-                                            :placeholder="'请输入' + linkTypeValName[item.linkType]"
-                                            v-model="item.linkValue"
-                                            style="width: 274px;">
-                                        </el-input>
-
                                         <el-select
-                                            v-else
+                                            v-if="item.linkType == 'module'"
                                             :placeholder="'请选择' + linkTypeValName[item.linkType]"
                                             v-model="item.moduleIndex"
                                             style="width: 274px;">
@@ -375,6 +379,26 @@
                                                 :label="'模块' + (moduleIndex + 1)">
                                             </el-option>
                                         </el-select>
+
+                                        <el-select
+                                            v-else-if="item.linkType == 'floor'"
+                                            :placeholder="'请选择' + linkTypeValName[item.linkType]"
+                                            v-model="item.floorIndex"
+                                            style="width: 274px;">
+                                            <el-option
+                                                v-for="(floor, floorIndex) in floorModule.module.floorList"
+                                                :key="floorIndex"
+                                                :value="floorIndex"
+                                                :label="'楼层' + (floorIndex + 1)">
+                                            </el-option>
+                                        </el-select>
+
+                                        <el-input
+                                            v-else
+                                            :placeholder="'请输入' + linkTypeValName[item.linkType]"
+                                            v-model="item.linkValue"
+                                            style="width: 274px;">
+                                        </el-input>
                                     </td>
                                 </tr>
                             </table>
@@ -552,6 +576,14 @@
 
                         <i class="btn icon-font icon-you1"></i>
                     </div>
+
+                    <div class="mt20px f14px cm-text-red">
+                        <p class="pb20px">楼层菜单模块需知：</p>
+                        <p class="pb20px pl5px pr5px">A. 楼层菜单模块与楼层模块相互关联，前者依赖后者</p>
+                        <p class="pb20px pl5px pr5px">B. 如果页面只配置了楼层菜单模块，没配置楼层模块。则楼层菜单也不会展示</p>
+                        <p class="pb20px pl5px pr5px">C. 楼层菜单模块中每个菜单的文案取自楼层模块各个楼层的楼层名称，且与之一一对应</p>
+                        <p class="pb20px pl5px pr5px">D. 楼层菜单模块的作用仅为点击楼层菜单就跳转到相应的楼层，除此以外的功能菜单，请用常规模块实现</p>
+                    </div>
                 </div>
 
                 <!--滑动Banner-->
@@ -614,11 +646,11 @@
                                         链接类型：
                                     </td>
                                     <td class="pb10px">
-
                                         <el-select
                                             v-model="item.linkType"
                                             placeholder="请选择链接类型"
-                                            style="width: 274px;">
+                                            style="width: 274px;"
+                                            @change="handleLinkTypeChange">
                                             <el-option
                                                 v-for="(value, key) in dict.linkType"
                                                 :key="key"
@@ -634,15 +666,8 @@
                                         {{linkTypeValName[item.linkType]}}：
                                     </td>
                                     <td class="pb10px">
-                                        <el-input
-                                            v-if="item.linkType != 'module'"
-                                            :placeholder="'请输入' + linkTypeValName[item.linkType]"
-                                            v-model="item.linkValue"
-                                            style="width: 274px;">
-                                        </el-input>
-
                                         <el-select
-                                            v-else
+                                            v-if="item.linkType == 'module'"
                                             :placeholder="'请选择' + linkTypeValName[item.linkType]"
                                             v-model="item.moduleIndex"
                                             style="width: 274px;">
@@ -653,6 +678,26 @@
                                                 :label="'模块' + (moduleIndex + 1)">
                                             </el-option>
                                         </el-select>
+
+                                        <el-select
+                                            v-else-if="item.linkType == 'floor'"
+                                            :placeholder="'请选择' + linkTypeValName[item.linkType]"
+                                            v-model="item.floorIndex"
+                                            style="width: 274px;">
+                                            <el-option
+                                                v-for="(floor, floorIndex) in floorModule.module.floorList"
+                                                :key="floorIndex"
+                                                :value="floorIndex"
+                                                :label="'楼层' + (floorIndex + 1)">
+                                            </el-option>
+                                        </el-select>
+
+                                        <el-input
+                                            v-else
+                                            :placeholder="'请输入' + linkTypeValName[item.linkType]"
+                                            v-model="item.linkValue"
+                                            style="width: 274px;">
+                                        </el-input>
                                     </td>
                                 </tr>
                             </table>
@@ -708,7 +753,8 @@
                 img: '',
                 linkType: '',
                 linkValue: '',
-                moduleIndex: ''
+                moduleIndex: '',
+                floorIndex: ''
             }
         ]
     });
@@ -722,6 +768,7 @@
                 pageId: '',
                 initFlag: false,
 
+                areaName: '',
                 pageTitle: '',
                 pageBgColor: '#ffffff',
                 moduleList: [],
@@ -732,11 +779,12 @@
                 curBannerIndex: 0,
 
                 linkTypeValName: {
-                    goods: '　商品ID',
-                    activity: '　活动ID',
-                    packActivity: '　活动ID',
-                    coupon: '　活动ID',
+                    goods: '商品ID',
+                    activity: '活动ID',
+                    packActivity: '活动ID',
+                    coupon: '活动ID',
                     module: '跳转模块',
+                    floor: '跳转楼层',
                     other: '链接地址'
                 },
 
@@ -755,12 +803,36 @@
             }
         },
         computed: {
+            areaData () {
+                var obj = {};
+
+                this.$store.state.area.areaList.forEach(function (item) {
+                    obj[item.area_id] = item;
+                });
+
+                return obj;
+            },
             dict () {
                 return this.$store.state.dict.activityPage;
             },
             curModule () {
                 var _this = this;
                 return _this.moduleList[_this.curModuleIndex];
+            },
+            floorModule () {
+                var result = {
+                    module: null,
+                    index: -1
+                };
+
+                this.moduleList.forEach(function (item, index) {
+                    if (item.moduleType == 'floor' || item.moduleType == 'slideFloor') {
+                        result.module = item;
+                        result.index = index;
+                    }
+                });
+
+                return result;
             }
         },
         methods: {
@@ -773,6 +845,8 @@
                         page_id: _this.pageId
                     },
                     success: function (res) {
+                        _this.areaName = _this.areaData[res.data.area_id].area_name;
+
                         if (res.data.setting) {
                             var setting = JSON.parse(res.data.setting);
                             _this.pageTitle = setting.pageTitle;
@@ -785,6 +859,16 @@
                         });
                     }
                 });
+            },
+
+            handleCurPreview (module, moduleIndex, floorIndex) {
+                var _this = this;
+
+                _this.curModuleIndex = moduleIndex;
+
+                if (module.moduleType == 'floor' || module.moduleType == 'slideFloor') {
+                    _this.curFloorIndex = floorIndex;
+                }
             },
 
             handleAddModule () {
@@ -832,7 +916,8 @@
                         img: '',
                         linkType: '',
                         linkValue: '',
-                        moduleIndex: ''
+                        moduleIndex: '',
+                        floorIndex: ''
                     }
                 ];
 
@@ -851,7 +936,8 @@
                     top: 110,
                     linkType: '',
                     linkValue: '',
-                    moduleIndex: ''
+                    moduleIndex: '',
+                    floorIndex: ''
                 });
 
                 _this.curLinkIndex = _this.curModule.linkList.length - 1;
@@ -881,7 +967,7 @@
                     left: Math.floor(scale * item.left) + 'px',
                     top: Math.floor(scale * item.top) + 'px',
                     backgroundColor: _this.curLinkIndex == index ? _this.colorList[index] : 'transparent',
-                    opacity: _this.curLinkIndex == index ? 0.9 : 1,
+                    opacity: _this.curLinkIndex == index ? 0.6 : 1,
                     border: _this.curLinkIndex == index ? 'none' : '1px solid ' + _this.colorList[index],
                     zIndex: _this.curLinkIndex == index ? 2 : 1
                 };
@@ -942,6 +1028,31 @@
                 this.curBannerIndex = index;
             },
 
+            handleLinkTypeChange () {
+                var _this = this,
+                    moduleType = _this.curModule.moduleType,
+                    list = {
+                        simple: 'linkList',
+                        slideBanner: 'bannerList'
+                    },
+                    index = {
+                        simple: 'curLinkIndex',
+                        slideBanner: 'curBannerIndex'
+                    };
+
+                if (!_this.initFlag) {
+                    return;
+                }
+
+                var targetList = list[moduleType],
+                    targetIndex = _this[index[moduleType]],
+                    target = _this.curModule[targetList][targetIndex];
+
+                target.linkValue = '';
+                target.moduleIndex = '';
+                target.floorIndex = '';
+            },
+
             handleSave () {
                 var _this = this;
 
@@ -958,6 +1069,7 @@
                     _this.moduleList.forEach(function (module, moduleIndex) {
 
                         if (module.moduleType == 'simple') {
+                            //常规模块
 
                             if (module.bgImg === '') {
                                 throw {message: '模块背景图url不能为空'};
@@ -1007,9 +1119,18 @@
 
                                     throw {message: str};
                                 }
+
+                                if (link.linkType == 'floor' && link.floorIndex === '') {
+                                    var str = '请选择链接' + (linkIndex + 1) +
+                                        '的' +
+                                        _this.linkTypeValName[link.linkType];
+
+                                    throw {message: str};
+                                }
                             });
 
                         } else if (module.moduleType == 'floor' || module.moduleType == 'slideFloor') {
+                            //楼层模块
 
                             module.floorList.forEach(function (floor, floorIndex) {
                                 if (floor.name === '') {
@@ -1029,7 +1150,23 @@
                                 }
                             });
 
+                        } else if (module.moduleType == 'floorMenu') {
+                            //楼层菜单模块
+
+                            if (module.menuFontColor === '') {
+                                throw {message: '菜单字体颜色不能为空'};
+                            }
+
+                            if (module.menuCurColor === '') {
+                                throw {message: '高亮字体颜色不能为空'};
+                            }
+
+                            if (module.menuBgColor === '') {
+                                throw {message: '菜单背景颜色不能为空'};
+                            }
+
                         } else if (module.moduleType == 'slideBanner') {
+                            //滑动banner模块
 
                             module.bannerList.forEach(function (banner, bannerIndex) {
                                 if (module.img === '') {
@@ -1059,21 +1196,15 @@
 
                                     throw {message: str};
                                 }
+
+                                if (banner.linkType == 'fllor' && banner.floorIndex === '') {
+                                    var str = '请选择Banner' + (bannerIndex + 1) +
+                                        '的' +
+                                        _this.linkTypeValName[banner.linkType];
+
+                                    throw {message: str};
+                                }
                             });
-
-                        } else if (module.moduleType == 'floorMenu') {
-
-                            if (module.menuFontColor === '') {
-                                throw {message: '菜单字体颜色不能为空'};
-                            }
-
-                            if (module.menuCurColor === '') {
-                                throw {message: '高亮字体颜色不能为空'};
-                            }
-
-                            if (module.menuBgColor === '') {
-                                throw {message: '菜单背景颜色不能为空'};
-                            }
 
                         }
                     });

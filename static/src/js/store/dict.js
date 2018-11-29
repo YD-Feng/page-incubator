@@ -15,6 +15,7 @@ module.exports = {
                 coupon: 'APP - 活动领取优惠券页',
                 myCoupons: 'APP - 我的优惠券页',
                 module: '跳转到当前活动页的某个模块',
+                floor: '跳转到楼层模块的某个楼层',
                 pageTop: '跳转到当前活动页的顶部',
                 other: '其他跳转'
             },

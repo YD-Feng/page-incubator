@@ -18,7 +18,9 @@ module.exports = {
         areaSrv.saveArea({
             area_id: req.body.area_id,
             area_name: req.body.area_name,
-            area_code: req.body.area_code
+            area_code: req.body.area_code,
+            test_user: req.body.test_user,
+            test_password: req.body.test_password
         }, function (result) {
 
             if (result.affectedRows > 0) {

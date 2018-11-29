@@ -2,7 +2,24 @@ var activityPageSrv = require('../../dataSrv/modules/activityPageSrv'),
     apiCode = require('../../config/apiCode'),
     path = require('path'),
     fs = require('fs'),
-    _ = require('underscore');
+    archiver = require('archiver'),
+    _ = require('underscore'),
+    deleteFolder = function (path, onlyContent) {
+        if (fs.existsSync(path)) {
+            fs.readdirSync(path).forEach(function (str) {
+                var curPath = path + '/' + str;
+                if (fs.statSync(curPath).isDirectory()) {
+                    deleteFolderRecursive(curPath);
+                } else {
+                    fs.unlinkSync(curPath);
+                }
+            });
+
+            if (!onlyContent) {
+                fs.rmdirSync(path);
+            }
+        }
+    };
 
 module.exports = {
     //获取活动页面列表
@@ -113,24 +130,60 @@ module.exports = {
 
             if (result.length > 0) {
 
-                var tpl = fs.readFileSync(path.resolve(__dirname, '../../files/page-tpl.html'), 'utf-8');
+                var tpl = fs.readFileSync(path.resolve(__dirname, '../../files/template/page-tpl.html'), 'utf-8'),
+                    activityPath = path.resolve(__dirname, '../../files/activity-' + req.body.activity_id),
+                    folder = result[0].folder,
+                    zipPath = path.resolve(__dirname, '../../files/zip'),
+                    zipFilePath = path.resolve(__dirname, '../../files/zip/' + folder + '.zip');
+
+                //先清空zip目录下的压缩包
+                deleteFolder(zipPath, true);
 
                 result.forEach(function (item) {
                     var setting = item.setting ? JSON.parse(item.setting) : {
                             pageTitle: item.activity_name,
                             pageBgColor: '#ffffff',
                             moduleList: []
-                        },
-                        activityPath = path.resolve(__dirname, '../../files/activity-' + req.body.activity_id),
-                        isPathExists = fs.existsSync(activityPath);
+                        };
 
-                    if (!isPathExists) {
+                    if (!fs.existsSync(activityPath)) {
                         fs.mkdirSync(activityPath);
                     }
 
                     var content = _.template(tpl)(setting);
                     fs.writeFileSync(activityPath + '/' + item.area_code + '.html', content);
                 });
+
+                if (!fs.existsSync(zipPath)) {
+                    fs.mkdirSync(zipPath);
+                }
+
+                var output = fs.createWriteStream(zipFilePath),
+                    archive = archiver('zip', {
+                        zlib: {
+                            level: 9
+                        }
+                    });
+
+                output.on('close', function () {
+                    //压缩包生成完毕
+                    console.log(archive.pointer() + ' total bytes');
+                    console.log('archiver has been finalized and the output file descriptor has closed.');
+                    //清除临时页面文件
+                    deleteFolder(activityPath);
+                    //导出压缩包
+                    res.sendfile(zipFilePath);
+                });
+
+                archive.on('error', function(err) {
+                    throw err;
+                });
+
+                archive.pipe(output);
+
+                archive.directory(activityPath + '/', folder);
+
+                archive.finalize();
 
             } else {
                 res.send({
