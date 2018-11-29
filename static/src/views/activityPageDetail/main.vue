@@ -28,7 +28,7 @@
                         <div class="preview-status-bar"></div>
                         <div v-bar style="width: 100%; height: 100%;">
                             <div>
-
+                                <div v-if="refreshFlag"></div>
                                 <ul>
                                     <li v-for="(module, moduleIndex) in moduleList">
                                         <div class="simple-module"
@@ -135,6 +135,7 @@
 
                 <div class="text-center mt20px">
                     <el-button type="primary" @click="handleSave">保存页面</el-button>
+                    <el-button type="success" @click="handleRefresh">刷新预览</el-button>
                     <el-button type="default" @click="goBack">取消编辑</el-button>
                 </div>
             </div>
@@ -767,6 +768,7 @@
             return {
                 pageId: '',
                 initFlag: false,
+                refreshFlag: false,
 
                 areaName: '',
                 pageTitle: '',
@@ -1242,6 +1244,9 @@
                 return false;
             },
 
+            handleRefresh () {
+                this.refreshFlag = !this.refreshFlag;
+            },
             goBack () {
                 this.$router.go(-1);
             }

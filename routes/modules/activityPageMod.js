@@ -134,21 +134,26 @@ module.exports = {
                     activityPath = path.resolve(__dirname, '../../files/activity-' + req.body.activity_id),
                     folder = result[0].folder,
                     zipPath = path.resolve(__dirname, '../../files/zip'),
-                    zipFilePath = path.resolve(__dirname, '../../files/zip/' + folder + '.zip');
+                    zipFilePath = path.resolve(__dirname, '../../files/zip/' + folder + '.zip'),
+                    testUser = result[0].test_user,
+                    testPassword = result[0].test_password;
 
                 //先清空zip目录下的压缩包
                 deleteFolder(zipPath, true);
 
                 result.forEach(function (item) {
                     var setting = item.setting ? JSON.parse(item.setting) : {
-                            pageTitle: item.activity_name,
-                            pageBgColor: '#ffffff',
-                            moduleList: []
-                        };
+                        pageTitle: item.activity_name,
+                        pageBgColor: '#ffffff',
+                        moduleList: []
+                    };
 
                     if (!fs.existsSync(activityPath)) {
                         fs.mkdirSync(activityPath);
                     }
+
+                    setting.testUser = testUser;
+                    setting.testPassword = testPassword;
 
                     var content = _.template(tpl)(setting);
                     fs.writeFileSync(activityPath + '/' + item.area_code + '.html', content);

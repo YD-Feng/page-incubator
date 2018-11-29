@@ -338,7 +338,7 @@
                                 <div class="goods-item"
                                      v-for="(goodsItem, index) in activityItem.goodsList"
                                      v-if="index < 12">
-                                    <a :href="'fmcgshop://goods/' + goodsItem.goodsId + '?isPresell=false'">
+                                    <a :href="goodsItem.link">
                                         <img class="picture" :src="goodsItem.thumb">
                                         <div class="goods-detail">
                                             <div class="oh">
@@ -374,7 +374,7 @@
                                 <div class="goods-item"
                                      v-for="(goodsItem, index) in activityItem.goodsList"
                                      v-if="index < 12">
-                                    <a :href="'fmcgshop://goods/' + goodsItem.goodsId + '?isPresell=false'">
+                                    <a :href="goodsItem.link">
                                         <img class="picture" :src="goodsItem.thumb">
                                         <div class="goods-detail">
                                             <div class="oh">
@@ -390,7 +390,7 @@
                                     </a>
                                 </div>
 
-                                <a :href="'fmcgshop://activity/' + activityItem.activityId + '?isPresell=false'"
+                                <a :href="(activityItem.activityType == 'promotion' ? 'fmcgshop://activity/' : 'fmcgshop://packActivity/') + activityItem.activityId"
                                    class="goods-item">
                                     <img class="placeholder-img" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/20181111-main-venue/more.jpg">
                                 </a>
@@ -440,9 +440,9 @@
                 </div>
                 <% } else if (module.moduleType == 'slideBanner') { %>
                 <div class="swipe clearfix">
-                    <ul @touchstart="start"
-                        @touchmove="move"
-                        @touchend="end"
+                    <ul @touchstart="handleTouchStart"
+                        @touchmove="handleTouchMove"
+                        @touchend="handleTouchEnd"
                         :style="{left: offsetLeft + 'px'}"
                         :class="{trans: isMove}">
                         <li v-for="(item, sIndex) in swiperList"
@@ -518,6 +518,7 @@
     %>
     window.activityList = <%= JSON.stringify(activityList) %>;
     window.swiperList = <%= JSON.stringify(swiperList) %>;
+    window.spCode = '<%= testUser + testPassword %>';
 </script>
 
 <script type="text/javascript" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/h5-activity/lib/vue.min.js"></script>
