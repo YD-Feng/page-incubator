@@ -44,7 +44,7 @@ module.exports = {
             listSQL += arr.join(' ');
 
             if (!opts.page_size) {
-                opts.page_size = 30;
+                opts.page_size = 10;
             }
 
             if (!opts.page) {
@@ -98,7 +98,7 @@ module.exports = {
 
                 arr.push('activity_name = ' + connPool.escape(opts.activity_name));
 
-                if (opts.activity_desc) {
+                if (typeof opts.activity_desc != 'undefined' && opts.activity_desc != '') {
                     //校验中间件不校验的非必传字段
                     arr.push('activity_desc = ' + connPool.escape(opts.activity_desc));
                 }

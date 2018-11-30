@@ -5,7 +5,7 @@ module.exports = {
     check: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
             var SQL =
-                'select * from user where user_name=' +
+                'select user_id, user_name, group_id, nick_name from user where user_name=' +
                 connPool.escape(opts.user_name) +
                 ' and password=' +
                 connPool.escape(opts.password);
@@ -22,45 +22,77 @@ module.exports = {
     getUserList: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
             var flag = 0,
-                str = '',
+                arr = [''],
                 countSQL = 'select count(*) from user',
-                listSQL = 'select * from user';
+                listSQL = 'select user.user_id, user.user_name, user.group_id, user.nick_name, user.create_time, user_group.group_name,' +
+                    ' date_format(user.create_time, "%Y-%m-%d %T") as create_time' +
+                    ' from user' +
+                    ' inner join user_group on user.group_id = user_group.group_id';
 
             if (!!opts.user_name) {
-                str = (flag == 0 ? ' where ' : ' and ') + 'name=' + connPool.escape(opts.user_name);
-                countSQL += str;
-                listSQL += str;
+                arr.push(
+                    (flag == 0 ? 'where ' : 'and ') +
+                    'user_name like "%' + opts.user_name + '%"'
+                );
                 flag++;
             }
 
-            if (!!opts.createTimeStart && typeof !!opts.createTimeEnd) {
-                str = (flag == 0 ? ' where ' : ' and ') + 'createTime between TIMESTAMP(' + connPool.escape(opts.createTimeStart + ' 00:00:00') + ') and TIMESTAMP(' + connPool.escape(opts.createTimeEnd + ' 23:59:59') + ')';
-                countSQL += str;
-                listSQL += str;
-                flag++;
-            } else if (!!opts.createTimeStart && !opts.createTimeEnd) {
-                str = (flag == 0 ? ' where ' : ' and ') + 'createTime >= TIMESTAMP(' + connPool.escape(opts.createTimeStart + ' 00:00:00') + ')';
-                countSQL += str;
-                listSQL += str;
-                flag++;
-            } else if (!opts.createTimeStart && typeof !!opts.createTimeEnd) {
-                str = (flag == 0 ? ' where ' : ' and ') + 'createTime <= TIMESTAMP(' + connPool.escape(opts.createTimeEnd + ' 23:59:59') + ')';
-                countSQL += str;
-                listSQL += str;
+            if (!!opts.nick_name) {
+                arr.push(
+                    (flag == 0 ? 'where ' : 'and ') +
+                    'user_name like "%' + opts.nick_name + '%"'
+                );
                 flag++;
             }
+
+            if (!!opts.group_id) {
+                arr.push(
+                    (flag == 0 ? 'where ' : 'and ') +
+                    'group_id=' + connPool.escape(opts.group_id)
+                );
+                flag++;
+            }
+
+            if (!!opts.start_time && !!opts.end_time) {
+
+                arr.push(
+                    (flag == 0 ? 'where ' : 'and ') +
+                    'create_time between TIMESTAMP(' + connPool.escape(opts.start_time) +
+                    ') and TIMESTAMP(' + connPool.escape(opts.end_time) + ')'
+                );
+
+            } else if (!!opts.start_time && !opts.end_time) {
+
+                arr.push(
+                    (flag == 0 ? 'where ' : 'and ') +
+                    'create_time >= TIMESTAMP(' + connPool.escape(opts.start_time) + ')'
+                );
+
+            } else if (!opts.start_time && !!opts.end_time) {
+
+                arr.push(
+                    (flag == 0 ? 'where ' : 'and ') +
+                    'create_time <= TIMESTAMP(' + connPool.escape(opts.end_time) + ')'
+                );
+
+            }
+
+            countSQL += arr.join(' ');
+            listSQL += arr.join(' ');
 
             if (!opts.pageSize) {
-                opts.pageSize = 30;
+                opts.pageSize = 10;
             }
 
             if (!opts.page) {
                 opts.page = 1;
             }
 
-            str = ' order by id limit ' + (opts.pageSize * (opts.page - 1)) + ',' + opts.pageSize;
-
-            listSQL += str;
+            listSQL +=
+                ' order by create_time desc limit ' +
+                (opts.page_size * (opts.page - 1)) +
+                ',' +
+                (opts.page_size * opts.page);
 
             connection.query(countSQL, function (err, countResult) {
                 if (err) throw err;
@@ -68,9 +100,9 @@ module.exports = {
                 connection.query(listSQL, function (err, listResult) {
                     if (err) throw err;
                     callback({
-                        totalCount: countResult[0]['count(*)'],
-                        page: opts.page,
-                        pageSize: opts.pageSize,
+                        total: countResult[0]['count(*)'],
+                        page: opts.page * 1,
+                        pageSize: opts.pageSize * 1,
                         list: listResult
                     });
                     connection.release();//释放链接
@@ -79,13 +111,57 @@ module.exports = {
         });
     },
 
+    //获取用户信息
+    getUserInfo: function (opts, callback) {
+        connPool.getConnection(function (err, connection) {
+            var SQL = 'select user_id, user_name, group_id, nick_name from user where user_id = ' + connPool.escape(opts.user_id);
+
+            connection.query(SQL, function (err, result) {
+                if (err) throw err;
+                callback(result);
+                connection.release();//释放链接
+            });
+        });
+    },
+
+    //修改密码
+    changePassword: function (opts, callback) {
+        connPool.getConnection(function (err, connection) {
+            var searchSQL =
+                'select * from user where user_id=' +
+                connPool.escape(opts.user_id) +
+                ' and password=' +
+                connPool.escape(opts.old_password);
+
+            connection.query(searchSQL, function (err, result) {
+                if (err) throw err;
+
+                if (result.length > 0) {
+
+                    var changePwdSQL = 'update user set password=' + connPool.escape(opts.new_password) + ' where user_id = ' + connPool.escape(opts.user_id);
+                    connection.query(changePwdSQL, function (err, result) {
+                        if (err) throw err;
+                        callback(result);
+                        connection.release();//释放链接
+                    });
+
+                } else {
+                    callback({
+                        affectedRows: 0,
+                        message: '旧密码输入有误'
+                    });
+                }
+            });
+        });
+    },
+
     //检测用户名是否存在
     checkUserName: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
-            var SQL = 'select * from user where name=' + connPool.escape(opts.userName);
+            var SQL = 'select user_id, user_name, group_id, nick_name from user where user_name=' + connPool.escape(opts.user_name);
 
-            if (typeof opts.id != 'undefined' && opts.id != '') {
-                SQL += 'and id!=' + connPool.escape(opts.id);
+            if (typeof opts.user_id != 'undefined' && opts.user_id != '') {
+                SQL += 'and user_id!=' + connPool.escape(opts.user_id);
             }
 
             connection.query(SQL, function (err, result) {
@@ -97,21 +173,34 @@ module.exports = {
     },
 
     //保存用户信息
-    save: function (opts, callback) {
+    saveUser: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
 
-            if (typeof opts.id != 'undefined' && opts.id != '') {
+            if (opts.user_id) {
                 //传入ID，则编辑
-                var strArr = [];
+                var strArr = [],
+                    SQL = '';
 
-                if (typeof opts.userName != 'undefined' && opts.userName != '') {
-                    strArr.push('name=' + connPool.escape(opts.userName));
+                //校验中间件不校验的非必传字段
+                if (typeof opts.user_name != 'undefined' && opts.user_name != '') {
+                    strArr.push('user_name=' + connPool.escape(opts.user_name));
                 }
+
                 if (typeof opts.password != 'undefined' && opts.password != '') {
                     strArr.push('password=' + connPool.escape(opts.password));
                 }
 
-                connection.query('update user set ' + strArr.join(',') + ' where id = ' + connPool.escape(opts.id), function (err, result) {
+                if (typeof opts.group_id != 'undefined' && opts.group_id != '') {
+                    strArr.push('group_id=' + connPool.escape(opts.group_id));
+                }
+
+                if (typeof opts.nick_name != 'undefined' && opts.nick_name != '') {
+                    strArr.push('nick_name=' + connPool.escape(opts.nick_name));
+                }
+
+                SQL = 'update user set ' + strArr.join(',') + ' where user_id = ' + connPool.escape(opts.user_id);
+
+                connection.query(SQL, function (err, result) {
                     if (err) throw err;
                     callback(result);
                     connection.release();//释放链接
@@ -119,12 +208,17 @@ module.exports = {
 
             } else {
                 //没传入ID，则新增
-                var values = [
-                    connPool.escape(opts.userName),
-                    connPool.escape(opts.password)
-                ];
+                var SQL = 'insert into user (user_name, password, group_id, nick_name) ',
+                    values = [
+                        connPool.escape(opts.user_name),
+                        connPool.escape(opts.password),
+                        connPool.escape(opts.group_id),
+                        connPool.escape(opts.nick_name)
+                    ];
 
-                connection.query('insert into user (name,password) values(' + values.join(',') + ')', function (err, result) {
+                SQL += 'values(' + values.join(',') + ')';
+
+                connection.query(SQL, function (err, result) {
                     if (err) throw err;
                     callback(result);
                     connection.release();//释放链接
@@ -134,15 +228,97 @@ module.exports = {
         });
     },
 
-    //获取用户分组列表
-    getUserGroupList: function (callback) {
+    //删除用户
+    delUser: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
-            var SQL = 'select * from user_group';
+            var SQL = 'delete from user where user_id = ' + connPool.escape(opts.user_id);
 
             connection.query(SQL, function (err, result) {
                 if (err) throw err;
                 callback(result);
                 connection.release();//释放链接
+            });
+        });
+    },
+
+    //获取用户分组列表
+    getUserGroupList: function (callback) {
+        connPool.getConnection(function (err, connection) {
+            var SQL = 'select * , date_format(create_time, "%Y-%m-%d %T") as create_time from user_group order by group_id desc';
+
+            connection.query(SQL, function (err, result) {
+                if (err) throw err;
+                callback(result);
+                connection.release();//释放链接
+            });
+        });
+    },
+
+    //保存分组信息
+    saveUserGroup: function (opts, callback) {
+        connPool.getConnection(function (err, connection) {
+
+            if (opts.group_id) {
+                //传入ID，则编辑
+                var arr = [],
+                    SQL = '';
+
+                arr.push('group_name = ' + connPool.escape(opts.group_name));
+
+                SQL = 'update user_group set ' + arr.join(',') + ' where group_id = ' + connPool.escape(opts.group_id);
+
+                connection.query(SQL, function (err, result) {
+                    if (err) throw err;
+                    callback(result);
+                    connection.release();//释放链接
+                });
+
+            } else {
+                //没传入ID，则新增
+                var SQL = 'insert into user_group (group_name) ',
+                    values = [
+                        connPool.escape(opts.group_name)
+                    ];
+
+                SQL += 'values(' + values.join(',') + ')';
+
+                connection.query(SQL, function (err, result) {
+                    if (err) throw err;
+                    callback(result);
+                    connection.release();//释放链接
+                });
+            }
+
+        });
+    },
+
+    //删除分组
+    delUserGroup: function (opts, callback) {
+        connPool.getConnection(function (err, connection) {
+            var delUserSQL = 'delete from user where group_id = ' + connPool.escape(opts.group_id),
+                delGroupSQL = 'delete from user_group where group_id = ' + connPool.escape(opts.group_id);
+
+            //开启事务
+            connection.beginTransaction(function (err){
+                if (err) throw err;
+
+                connection.query(delUserSQL, function (err, result) {
+                    if (err) throw err;
+
+                    connection.query(delGroupSQL, function (err, result) {
+                        if (err) throw err;
+
+                        connection.commit(function (err) {
+                            if (err) {
+                                connection.rollback(function () {
+                                    throw err;
+                                });
+                            }
+                            callback(result);
+                            connection.release();//释放链接
+                        });
+                    });
+                });
             });
         });
     },

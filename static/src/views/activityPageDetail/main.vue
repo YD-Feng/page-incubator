@@ -95,7 +95,7 @@
                                                 </li>
                                             </ul>
 
-                                            <i class="btn icon-font icon-you1"></i>
+                                            <i class="btn icon-font icon-xia"></i>
                                         </div>
 
                                         <div class="banner-module"
@@ -575,7 +575,7 @@
                             </li>
                         </ul>
 
-                        <i class="btn icon-font icon-you1"></i>
+                        <i class="btn icon-font icon-xia"></i>
                     </div>
 
                     <div class="mt20px f14px cm-text-red">

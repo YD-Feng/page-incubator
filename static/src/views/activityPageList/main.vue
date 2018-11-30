@@ -16,6 +16,7 @@
 
         <div class="oh">
             <el-button
+                v-if="userInfo.group_id == 1"
                 class="mb10px"
                 type="primary"
                 @click="openAreaDialog()">
@@ -334,10 +335,6 @@
     module.exports = {
         data () {
             return {
-                pickerOptions: {
-                    shortcuts: utils.pickerOptShortcuts
-                },
-
                 activity: {},
 
                 form: {
@@ -372,6 +369,9 @@
                 });
 
                 return arr.length != 0;
+            },
+            userInfo () {
+                return this.$store.state.user.userInfo;
             }
         },
         methods: {
@@ -450,7 +450,6 @@
                         obj.area_code_sp = obj.area_code;
                         obj.test_user_sp = obj.test_user;
                         obj.test_password_sp = obj.test_password;
-
                         obj.is_edit = false;
                         return obj;
                     });
@@ -483,6 +482,8 @@
                     area_id: '',
                     area_name: '',
                     area_code: '',
+                    test_user: '',
+                    test_password: '',
                     area_name_sp: '',
                     area_code_sp: '',
                     test_user_sp: '',

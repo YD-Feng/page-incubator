@@ -19,6 +19,7 @@ var _ = require('underscore'), //引入 underscore
             '/user/logout': userMod.logout,
             '/user/getUserList': userMod.getUserList,
             '/user/checkStatus': userMod.checkStatus,
+            '/user/getUserInfo': userMod.getUserInfo,
             '/user/getUserGroupList': userMod.getUserGroupList,
 
             '/activity/getActivityList': activityMod.getActivityList,
@@ -33,7 +34,13 @@ var _ = require('underscore'), //引入 underscore
             '/common/imageUpload': commonMod.imageUpload,
 
             '/user/login': userMod.login,
-            '/user/add': userMod.save,
+            '/user/changePassword': userMod.changePassword,
+            '/user/add': userMod.saveUser,
+            '/user/update': userMod.saveUser,
+            '/user/del': userMod.delUser,
+            '/user/addUserGroup': userMod.saveUserGroup,
+            '/user/updateUserGroup': userMod.saveUserGroup,
+            '/user/delUserGroup': userMod.delUserGroup,
 
             '/activity/add': activityMod.saveActivity,
             '/activity/update': activityMod.saveActivity,

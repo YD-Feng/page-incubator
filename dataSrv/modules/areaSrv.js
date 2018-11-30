@@ -64,13 +64,26 @@ module.exports = {
             var delPageSQL = 'delete from activity_page where area_id = ' + connPool.escape(opts.area_id),
                 delAreaSQL = 'delete from area where area_id = ' + connPool.escape(opts.area_id);
 
-            connection.query(delPageSQL, function (err, result) {
+            //开启事务
+            connection.beginTransaction(function (err) {
                 if (err) throw err;
 
-                connection.query(delAreaSQL, function (err, result) {
+                connection.query(delPageSQL, function (err, result) {
                     if (err) throw err;
-                    callback(result);
-                    connection.release();//释放链接
+
+                    connection.query(delAreaSQL, function (err, result) {
+                        if (err) throw err;
+
+                        connection.commit(function (err) {
+                            if (err) {
+                                connection.rollback(function () {
+                                    throw err;
+                                });
+                            }
+                            callback(result);
+                            connection.release();//释放链接
+                        });
+                    });
                 });
             });
         });

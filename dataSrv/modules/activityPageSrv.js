@@ -5,9 +5,9 @@ module.exports = {
     getActivityPageList: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
             var countSQL = 'select count(*) from activity_page where activity_id = ' + connPool.escape(opts.activity_id),
-                listSQL = 'select activity_page.*, area.area_name, area.area_code' +
-                    ' , date_format(activity_page.create_time, "%Y-%m-%d %T") as create_time' +
-                    ' , date_format(activity_page.last_update_time, "%Y-%m-%d %T") as last_update_time' +
+                listSQL = 'select activity_page.*, area.area_name, area.area_code,' +
+                    ' date_format(activity_page.create_time, "%Y-%m-%d %T") as create_time,' +
+                    ' date_format(activity_page.last_update_time, "%Y-%m-%d %T") as last_update_time' +
                     ' from activity_page' +
                     ' inner join area on activity_page.area_id = area.area_id' +
                     ' where activity_page.activity_id = ' + connPool.escape(opts.activity_id);

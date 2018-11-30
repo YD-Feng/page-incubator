@@ -54,6 +54,28 @@ module.exports = {
         });
     },
 
+    changePassword: function (req, res) {
+        userSrv.changePassword({
+            user_id: req.cookies.user_id,
+            old_password: req.body.old_password,
+            new_password: req.body.new_password
+        }, function (result) {
+            if (result.affectedRows > 0) {
+                res.send({
+                    code: apiCode.success,
+                    data: result,
+                    msg: '操作成功'
+                });
+            } else {
+                res.send({
+                    code: apiCode.dataBaseErr,
+                    data: null,
+                    msg: result.message
+                });
+            }
+        });
+    },
+
     //用户退出登录
     logout: function (req, res) {
         res.clearCookie('user_id', {
@@ -85,6 +107,27 @@ module.exports = {
                 data: result,
                 msg: ''
             });
+        });
+    },
+
+    //获取某个用户的信息
+    getUserInfo: function (req, res, logger) {
+        userSrv.getUserInfo({
+            user_id: req.cookies.user_id
+        }, function (result) {
+            if (result.length > 0) {
+                res.send({
+                    code: apiCode.success,
+                    data: result[0],
+                    msg: ''
+                });
+            } else {
+                res.send({
+                    code: apiCode.noDataErr,
+                    data: result,
+                    msg: '没有找到该用户'
+                });
+            }
         });
     },
 
@@ -121,8 +164,8 @@ module.exports = {
         }
     },
 
-    //新增用户
-    save: function (req, res) {
+    //保存用户信息
+    saveUser: function (req, res) {
         userSrv.checkUserName({
             user_id: req.body.user_id,
             user_name: req.body.user_name
@@ -143,10 +186,10 @@ module.exports = {
         });
 
         function saveUserMsg (req, res) {
-            userSrv.save({
+            userSrv.saveUser({
                 user_id: req.body.user_id || '',
                 user_name: req.body.user_name,
-                password: password,
+                password: req.body.password,
                 group_id: req.body.group_id,
                 nick_name: req.body.nick_name
             }, function (result) {
@@ -169,6 +212,29 @@ module.exports = {
         }
     },
 
+    //删除用户
+    delUser: function (req, res) {
+        userSrv.delUser({
+            user_id: req.body.user_id
+        }, function (result) {
+
+            if (result.affectedRows > 0) {
+                res.send({
+                    code: apiCode.success,
+                    data: result,
+                    msg: '操作成功'
+                });
+            } else {
+                res.send({
+                    code: apiCode.dataBaseErr,
+                    data: result,
+                    msg: '操作失败'
+                });
+            }
+
+        });
+    },
+
     //获取用户分组列表
     getUserGroupList: function (req, res) {
         userSrv.getUserGroupList(function (result) {
@@ -178,5 +244,52 @@ module.exports = {
                 msg: ''
             });
         });
-    }
+    },
+
+    //保存用户信息
+    saveUserGroup: function (req, res) {
+        userSrv.saveUserGroup({
+            group_id: req.body.group_id || '',
+            group_name: req.body.group_name
+        }, function (result) {
+
+            if (result.affectedRows > 0) {
+                res.send({
+                    code: apiCode.success,
+                    data: result,
+                    msg: '操作成功'
+                });
+            } else {
+                res.send({
+                    code: apiCode.dataBaseErr,
+                    data: result,
+                    msg: '操作失败'
+                });
+            }
+
+        });
+    },
+
+    //删除用户
+    delUserGroup: function (req, res) {
+        userSrv.delUserGroup({
+            group_id: req.body.group_id
+        }, function (result) {
+
+            if (result.affectedRows > 0) {
+                res.send({
+                    code: apiCode.success,
+                    data: result,
+                    msg: '操作成功'
+                });
+            } else {
+                res.send({
+                    code: apiCode.dataBaseErr,
+                    data: result,
+                    msg: '操作失败'
+                });
+            }
+
+        });
+    },
 };

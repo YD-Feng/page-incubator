@@ -12,7 +12,13 @@ var userConf = require('./modules/userConf'),
             '/user/status'
         ],
 
+        '/user/changePassword': userConf.changePassword,
         '/user/add': userConf.add,
+        '/user/update': userConf.update,
+        '/user/del': userConf.del,
+        '/user/addUserGroup': userConf.addUserGroup,
+        '/user/updateUserGroup': userConf.updateUserGroup,
+        '/user/delUserGroup': userConf.delUserGroup,
 
         '/activity/add': activityConf.add,
         '/activity/update': activityConf.update,

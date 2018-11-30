@@ -47,7 +47,7 @@
 
                 <el-form-item class="pl10px">
                     <el-button type="primary" @click="search">查询</el-button>
-                    <el-button type="success" @click="handleReset">重置</el-button>
+                    <el-button type="default" @click="handleReset">重置</el-button>
                 </el-form-item>
             </el-form>
         </div>
@@ -186,7 +186,7 @@
                         </td>
                         <td valign="top" class="pl10px pt10px">
                             <el-input
-                                placeholder="请输入活动名称"
+                                placeholder="请输入页面目录"
                                 v-model="dialog.folder"
                                 style="width: 300px;">
                             </el-input>

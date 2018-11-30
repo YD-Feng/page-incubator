@@ -1,13 +1,22 @@
 module.exports = [
     {
         path: '/',
-        name: 'main',
+        name: 'home',
         component: function (resolve) {
-            require.ensure(['./../views/main.vue'], function (require) {
-                resolve(require('./../views/main.vue'));
-            }, 'main');
+            require.ensure(['./../views/home.vue'], function (require) {
+                resolve(require('./../views/home.vue'));
+            }, 'home');
         },
         children: [
+            {
+                path: '/userList',
+                name: 'userList',
+                component: function (resolve) {
+                    require.ensure(['./../views/userList/main.vue'], function (require) {
+                        resolve(require('./../views/userList/main.vue'));
+                    }, 'userList');
+                }
+            },
             {
                 path: '/activityList',
                 name: 'activityList',
