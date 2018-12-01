@@ -184,7 +184,7 @@ CREATE TABLE IF NOT EXISTS `activity_page` (
 3.执行数据库脚本<br>
 4.进入项目的 static 目录，在该目录下执行 npm install 安装前端的依赖包<br>
 5.进入项目的 static 目录，在该目录下执行 npm run build 编译项目的前端静态资源<br>
-5.返回项目根目录，并执行 npm install 安装后端的依赖包<br>
-6.在目根目录下执行 npm run start 启动项目的后端服务<br>
-7.打开浏览器，访问 http://127.0.0.1:3000<br>
+6.返回项目根目录，并执行 npm install 安装后端的依赖包<br>
+7.在目根目录下执行 npm run start 启动项目的后端服务<br>
+8.打开浏览器，访问 http://127.0.0.1:3000<br>
 看到登录界面，说明部署完成<br>
