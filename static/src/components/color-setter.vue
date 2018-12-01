@@ -1,7 +1,7 @@
 <template>
     <div class="color-setter">
         <el-input
-            v-model="color"
+            v-model.trim="color"
             placeholder="请输入16进制色值"
             style="width: 120px;"
             class="mr5px"

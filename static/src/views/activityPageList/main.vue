@@ -203,7 +203,7 @@
         <el-dialog
             title="区域管理"
             :visible.sync="areaDialog.visible"
-            custom-class="activity-page-dialog-720px">
+            custom-class="activity-page-dialog-780px">
             <!--列表-->
             <el-table
                 ref="areaTable"
@@ -211,13 +211,20 @@
                 max-height="400"
                 border>
                 <el-table-column
+                    label="序号"
+                    type="index"
+                    width="60"
+                    align="center">
+                </el-table-column>
+
+                <el-table-column
                     label="区域名称"
                     min-width="135"
                     align="center">
                     <template slot-scope="scope">
                         <el-input
                             v-if="scope.row.is_edit"
-                            v-model="scope.row.area_name_sp"
+                            v-model.trim="scope.row.area_name_sp"
                             style="width: 100px;">
                         </el-input>
 
@@ -234,7 +241,7 @@
                     <template slot-scope="scope">
                         <el-input
                             v-if="scope.row.is_edit"
-                            v-model="scope.row.area_code_sp"
+                            v-model.trim="scope.row.area_code_sp"
                             style="width: 100px;">
                         </el-input>
 
@@ -251,7 +258,7 @@
                     <template slot-scope="scope">
                         <el-input
                             v-if="scope.row.is_edit"
-                            v-model="scope.row.test_user_sp"
+                            v-model.trim="scope.row.test_user_sp"
                             style="width: 100px;">
                         </el-input>
 
@@ -268,7 +275,7 @@
                     <template slot-scope="scope">
                         <el-input
                             v-if="scope.row.is_edit"
-                            v-model="scope.row.test_password_sp"
+                            v-model.trim="scope.row.test_password_sp"
                             style="width: 100px;">
                         </el-input>
 
@@ -309,7 +316,7 @@
                             type="text"
                             v-if="!scope.row.is_edit"
                             :disabled="hasEditArea"
-                            @click="handleDelArea(scope.row)">
+                            @click="handleDelArea(scope.row, scope.$index)">
                             删除
                         </el-button>
                     </template>
@@ -493,7 +500,7 @@
 
                 this.$refs.areaTable.$refs.bodyWrapper.scrollTop = 0;
             },
-            handleDelArea (row) {
+            handleDelArea (row, index) {
                 var _this = this;
 
                 _this.$confirm('确定要删除此区域？删除区域的同时会把 【全部活动里此区域下的页面】 删除，请谨慎操作！！', '系统提示', {
@@ -502,10 +509,10 @@
                     customClass: 'cm-confirm-box',
                     type: 'warning'
                 }).then(function () {
-                    _this.doDelArea(row);
+                    _this.doDelArea(row, index);
                 }, function () {});
             },
-            doDelArea (row) {
+            doDelArea (row, index) {
                 var _this = this;
 
                 _this.$post({
@@ -515,6 +522,7 @@
                     },
                     success: function (res) {
                         _this.$message.success('删除成功');
+                        _this.areaDialog.areaList.splice(index, 1);
                         //操作完成后，重新获取区域列表，并 set 到 store 中
                         _this.getAreaList();
                         _this.form.page = 1;
@@ -550,6 +558,25 @@
                         throw {message: '请输入测试账号密码'};
                     } else if (row.test_password_sp.length > 15) {
                         throw {message: '测试账号密码最多只能输入15个字符'};
+                    }
+
+                    let isAddedName = _this.areaList.filter((item) => {
+                        return item.area_name == row.area_name_sp;
+                    }).length > 0;
+
+                    if (!row.area_id) {
+                        //新增区域时要做校验
+                        if (isAddedName) {
+                            throw {message: '区域名称 ' + row.area_name_sp + ' 已存在列表中，请勿重复添加'};
+                        }
+
+                        let isAddedCode = _this.areaList.filter((item) => {
+                            return item.area_code == row.area_code_sp;
+                        }).length > 0;
+
+                        if (isAddedCode) {
+                            throw {message: '区域编码 ' + row.area_code_sp + ' 已使用，不能使用重复的编码'};
+                        }
                     }
 
                 } catch (err) {
@@ -677,10 +704,10 @@
     .activity-page-dialog-300px{
         width: 300px;
     }
-    .activity-page-dialog-720px{
-        width: 720px;
+    .activity-page-dialog-780px{
+        width: 780px;
     }
-    .activity-page-dialog-720px .el-input__inner{
+    .activity-page-dialog-780px .el-input__inner{
         text-align: center;
     }
 </style>

@@ -41,7 +41,7 @@
 
                 <el-form-item label="用户名" prop="user_name">
                     <el-input
-                        v-model="form.user_name"
+                        v-model.trim="form.user_name"
                         placeholder="请输入用户名"
                         class="form-input-width">
                     </el-input>
@@ -49,7 +49,7 @@
 
                 <el-form-item label="用户昵称" prop="nick_name">
                     <el-input
-                        v-model="form.nick_name"
+                        v-model.trim="form.nick_name"
                         placeholder="请输入用户昵称"
                         class="form-input-width">
                     </el-input>
@@ -193,7 +193,7 @@
                         </td>
                         <td class="pb10px">
                             <el-input
-                                v-model="userDialog.user_name"
+                                v-model.trim="userDialog.user_name"
                                 placeholder="请输入用户名"
                                 class="form-input-width">
                             </el-input>
@@ -205,7 +205,7 @@
                         </td>
                         <td class="pb10px">
                             <el-input
-                                v-model="userDialog.password"
+                                v-model.trim="userDialog.password"
                                 placeholder="请输入用户密码(非必填)"
                                 class="form-input-width">
                             </el-input>
@@ -217,7 +217,7 @@
                         </td>
                         <td class="pb10px">
                             <el-input
-                                v-model="userDialog.nick_name"
+                                v-model.trim="userDialog.nick_name"
                                 placeholder="请输入用户昵称"
                                 class="form-input-width">
                             </el-input>
@@ -277,7 +277,7 @@
                     <template slot-scope="scope">
                         <el-input
                             v-if="scope.row.is_edit"
-                            v-model="scope.row.group_name_sp"
+                            v-model.trim="scope.row.group_name_sp"
                             style="width: 100px;">
                         </el-input>
 
@@ -325,7 +325,7 @@
                             type="text"
                             v-if="!scope.row.is_edit"
                             :disabled="hasEditGroup"
-                            @click="handleDelGroup(scope.row)">
+                            @click="handleDelGroup(scope.row, scope.$index)">
                             删除
                         </el-button>
                     </template>
@@ -504,7 +504,7 @@
 
                 this.$refs.groupTable.$refs.bodyWrapper.scrollTop = 0;
             },
-            handleDelGroup (row) {
+            handleDelGroup (row, index) {
                 var _this = this;
 
                 _this.$confirm('确定要删除此分组？删除分组的同时会把 【全部此分组下的用户】 删除，请谨慎操作！！', '系统提示', {
@@ -513,10 +513,10 @@
                     customClass: 'cm-confirm-box',
                     type: 'warning'
                 }).then(function () {
-                    _this.doDelGroup(row);
+                    _this.doDelGroup(row, index);
                 }, function () {});
             },
-            doDelGroup (row) {
+            doDelGroup (row, index) {
                 var _this = this;
 
                 _this.$post({
@@ -526,6 +526,7 @@
                     },
                     success: function (res) {
                         _this.$message.success('删除成功');
+                        _this.groupDialog.groupList.splice(index, 1);
                         //操作完成后，重新获取区域列表，并 set 到 store 中
                         _this.getUserGroupList();
                         _this.form.page = 1;

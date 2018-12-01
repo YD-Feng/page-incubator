@@ -150,7 +150,7 @@
                     页面标题：
                     <el-input
                         placeholder="请输入页面标题"
-                        v-model="pageTitle"
+                        v-model.trim="pageTitle"
                         style="width: 183px;">
                     </el-input>
                 </div>
@@ -198,7 +198,7 @@
 
                                     <el-input
                                         placeholder="请输入模块背景图url"
-                                        v-model="item.bgImg"
+                                        v-model.trim="item.bgImg"
                                         style="width: 206px;">
                                     </el-input>
                                 </td>
@@ -316,7 +316,7 @@
                                         热区宽度：
                                         <el-input
                                             placeholder="请输入"
-                                            v-model="item.width"
+                                            v-model.trim="item.width"
                                             style="width: 85px;">
                                         </el-input>
                                     </td>
@@ -324,7 +324,7 @@
                                         热区高度：
                                         <el-input
                                             placeholder="请输入"
-                                            v-model="item.height"
+                                            v-model.trim="item.height"
                                             style="width: 85px;">
                                         </el-input>
                                     </td>
@@ -334,7 +334,7 @@
                                         距离上边：
                                         <el-input
                                             placeholder="请输入"
-                                            v-model="item.top"
+                                            v-model.trim="item.top"
                                             style="width: 85px;">
                                         </el-input>
                                     </td>
@@ -342,7 +342,7 @@
                                         距离左边：
                                         <el-input
                                             placeholder="请输入"
-                                            v-model="item.left"
+                                            v-model.trim="item.left"
                                             style="width: 85px;">
                                         </el-input>
                                     </td>
@@ -405,7 +405,7 @@
                                         <el-input
                                             v-else
                                             :placeholder="'请输入' + linkTypeValName[item.linkType]"
-                                            v-model="item.linkValue"
+                                            v-model.trim="item.linkValue"
                                             style="width: 274px;">
                                         </el-input>
                                     </td>
@@ -491,7 +491,7 @@
                                     <td class="pb10px">
                                         <el-input
                                             placeholder="请输入楼层名称"
-                                            v-model="item.name"
+                                            v-model.trim="item.name"
                                             style="width: 274px;">
                                         </el-input>
                                     </td>
@@ -504,7 +504,7 @@
                                     <td class="pb10px">
                                         <el-input
                                             placeholder="请输入标题图片url"
-                                            v-model="item.titleImg"
+                                            v-model.trim="item.titleImg"
                                             style="width: 274px;">
                                         </el-input>
                                     </td>
@@ -535,7 +535,7 @@
                                     </td>
                                     <td class="pb10px">
                                         <el-input
-                                            v-model="item.activityId"
+                                            v-model.trim="item.activityId"
                                             style="width: 274px;">
                                         </el-input>
                                     </td>
@@ -644,7 +644,7 @@
                                     <td class="pb10px">
                                         <el-input
                                             placeholder="请输入图片url"
-                                            v-model="item.img"
+                                            v-model.trim="item.img"
                                             style="width: 274px;">
                                         </el-input>
                                     </td>
@@ -704,7 +704,7 @@
                                         <el-input
                                             v-else
                                             :placeholder="'请输入' + linkTypeValName[item.linkType]"
-                                            v-model="item.linkValue"
+                                            v-model.trim="item.linkValue"
                                             style="width: 274px;">
                                         </el-input>
                                     </td>

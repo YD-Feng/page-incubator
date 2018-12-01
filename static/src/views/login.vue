@@ -5,13 +5,13 @@
             <div class="input-wrap">
                 <span class="col-txt">用户名:</span>
                 <span class="col-input">
-                    <input class="input" v-model="form.user_name" placeholder="请输入用户邮箱"></input>
+                    <input class="input" v-model.trim="form.user_name" placeholder="请输入用户邮箱"></input>
                 </span>
             </div>
             <div class="input-wrap mt20px">
                 <span class="col-txt">密　码:</span>
                 <span class="col-input">
-                    <input class="input" type="password" v-model="form.password" placeholder="请输入用户密码"></input>
+                    <input class="input" type="password" v-model.trim="form.password" placeholder="请输入用户密码"></input>
                 </span>
             </div>
             <div class="mt20px">

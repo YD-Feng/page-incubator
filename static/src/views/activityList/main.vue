@@ -39,7 +39,7 @@
 
                 <el-form-item label="活动名称" prop="activity_name">
                     <el-input
-                        v-model="form.activity_name"
+                        v-model.trim="form.activity_name"
                         placeholder="请输入项目名称"
                         class="form-input-width">
                     </el-input>
@@ -174,7 +174,7 @@
                         <td valign="top" class="pl10px">
                             <el-input
                                 placeholder="请输入活动名称"
-                                v-model="dialog.activity_name"
+                                v-model.trim="dialog.activity_name"
                                 style="width: 300px;">
                             </el-input>
                         </td>
@@ -187,7 +187,7 @@
                         <td valign="top" class="pl10px pt10px">
                             <el-input
                                 placeholder="请输入页面目录"
-                                v-model="dialog.folder"
+                                v-model.trim="dialog.folder"
                                 style="width: 300px;">
                             </el-input>
                         </td>
@@ -203,7 +203,7 @@
                                 type="textarea"
                                 :rows="3"
                                 placeholder="请输入活动描述"
-                                v-model="dialog.activity_desc"
+                                v-model.trim="dialog.activity_desc"
                                 style="width: 300px;">
                             </el-input>
                         </td>
