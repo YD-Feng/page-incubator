@@ -9,7 +9,7 @@ var activityPageSrv = require('../../dataSrv/modules/activityPageSrv'),
             fs.readdirSync(path).forEach(function (str) {
                 var curPath = path + '/' + str;
                 if (fs.statSync(curPath).isDirectory()) {
-                    deleteFolderRecursive(curPath);
+                    deleteFolder(curPath);
                 } else {
                     fs.unlinkSync(curPath);
                 }
