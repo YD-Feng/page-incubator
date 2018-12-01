@@ -75,7 +75,7 @@ CREATE TABLE IF NOT EXISTS `user` (
   `nick_name` varchar(20) NOT NULL COMMENT '用户昵称',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`user_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=5 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- 转存表中的数据 `user` 默认添加一个超管帐号，用户名：admin，密码：admin
@@ -95,7 +95,7 @@ CREATE TABLE IF NOT EXISTS `user_group` (
   `group_name` varchar(30) NOT NULL COMMENT '用户分组名',
   `create_time` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP COMMENT '创建时间',
   PRIMARY KEY (`group_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户分组' AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='用户分组' AUTO_INCREMENT=1 ;
 
 --
 -- 转存表中的数据 `user_group`
@@ -119,7 +119,7 @@ CREATE TABLE IF NOT EXISTS `area` (
   `test_user` varchar(30) NOT NULL COMMENT '测试账号',
   `test_password` varchar(30) NOT NULL COMMENT '测试账号密码',
   PRIMARY KEY (`area_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=19 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 AUTO_INCREMENT=1 ;
 
 --
 -- 转存表中的数据 `area`
@@ -155,7 +155,7 @@ CREATE TABLE IF NOT EXISTS `activity` (
   `activity_desc` varchar(100) DEFAULT NULL COMMENT '活动描述',
   `folder` varchar(30) NOT NULL COMMENT '活动页面目录',
   PRIMARY KEY (`activity_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='活动表' AUTO_INCREMENT=7 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='活动表' AUTO_INCREMENT=1 ;
 
 
 
@@ -173,7 +173,7 @@ CREATE TABLE IF NOT EXISTS `activity_page` (
   `last_update_name` varchar(30) NOT NULL COMMENT '最后维护人',
   `last_update_time` timestamp NOT NULL DEFAULT '0000-00-00 00:00:00' COMMENT '最后维护时间',
   PRIMARY KEY (`page_id`)
-) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='活动页面表' AUTO_INCREMENT=6 ;
+) ENGINE=InnoDB  DEFAULT CHARSET=utf8 COMMENT='活动页面表' AUTO_INCREMENT=1 ;
 ```
 
 <br><br>
