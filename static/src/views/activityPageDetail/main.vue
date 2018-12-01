@@ -288,7 +288,15 @@
                         </div>
                     </div>
 
-                    <p class="f14px mb10px mt20px">模块{{curModuleIndex + 1}} - 链接列表</p>
+                    <p class="f14px mb5px mt15px lh30px">
+                        模块{{curModuleIndex + 1}} - 链接列表
+                        <el-button
+                            type="text"
+                            @click="showDialog">
+                            查看链接配置说明
+                            <i class="el-icon-question"></i>
+                        </el-button>
+                    </p>
 
                     <ul>
                         <li v-for="(item, index) in curModule.linkList"
@@ -728,6 +736,23 @@
 
             </div>
         </div>
+
+        <el-dialog
+            title="链接配置说明"
+            :visible.sync="dialog.visible"
+            custom-class="activity-page-dialog-480px">
+            <div class="pl20px pr20px">
+                <p class="text-center pb20px">
+                    <img src="../../imgs/example.png"/>
+                </p>
+                <p class="pb10px">
+                    A. 请保证切图（设计稿）的宽度为 <span class="cm-text-red fBold">640px</span>，链接热区的位置配置都必须以此为基础量出的距离才有效
+                </p>
+                <p class="pb5px">
+                    B. 热区的宽高，<span class="cm-text-blue">相对切图</span>上边、左边的距离，可使用 PhotoShop 在切图上量出。<span class="cm-text-red fBold">测量方法请见上方示意图</span>
+                </p>
+            </div>
+        </el-dialog>
     </div>
 </template>
 
@@ -801,7 +826,11 @@
                     '#690ce0',
                     '#0410c7',
                     '#ff7bcc'
-                ]
+                ],
+
+                dialog: {
+                    visible: false
+                }
             }
         },
         computed: {
@@ -1244,6 +1273,13 @@
                 return false;
             },
 
+            showDialog () {
+                this.dialog.visible = true;
+            },
+            closeDialog () {
+                this.dialog.visible = false;
+            },
+
             handleRefresh () {
                 this.refreshFlag = !this.refreshFlag;
             },
@@ -1639,5 +1675,11 @@
         font-size: 14px;
         margin-bottom: 10px;
         border-radius: 6px;
+    }
+</style>
+
+<style>
+    .activity-page-dialog-480px{
+        width: 480px;
     }
 </style>
