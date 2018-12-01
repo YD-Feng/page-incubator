@@ -2,6 +2,7 @@ module.exports = [
     {
         path: '/',
         name: 'home',
+        redirect: '/activityList',
         component: function (resolve) {
             require.ensure(['./../views/home.vue'], function (require) {
                 resolve(require('./../views/home.vue'));
