@@ -20,8 +20,8 @@
     <!-- 告诉设备忽略将页面中的电话号码和email -->
     <meta name="format-detection" content="telephone=no, email=no" />
 
-    <link rel="stylesheet" href="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/h5-activity/css/common.css">
-    <link rel="stylesheet" href="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/h5-activity/css/iconfont.css">
+    <link rel="stylesheet" href="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/css/common.css">
+    <link rel="stylesheet" href="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/css/iconfont.css">
     <style>
         .page-wrap {
             overflow: hidden;
@@ -152,7 +152,7 @@
             border-radius: 0.10rem;
             width: 0.4rem;
             height: 0.4rem;
-            background: url('https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/20180803-Week/ALL/icon.png') no-repeat;
+            background: url('https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/img/icon.png') no-repeat;
             background-size: 100%;
             font-size: 0.22rem;
         }
@@ -160,7 +160,7 @@
             width: 100%;
             height: 2rem;
             display: block;
-            background: url('../../../img/place_holder_180.png') no-repeat;
+            background: url('https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/img/place_holder_180.png') no-repeat;
             -webkit-background-size: 100%;
             background-size: 100%;
         }
@@ -214,7 +214,7 @@
             width: 100%;
             height: 3.06rem;
             display: block;
-            background: url('../../../img/place_holder_180.png') no-repeat;
+            background: url('https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/img/place_holder_180.png') no-repeat;
             -webkit-background-size: 100%;
             background-size: 100%;
         }
@@ -316,7 +316,7 @@
                             linkHref = link.linkValue;
                         }
                     %>
-                    <a :href="<%= linkHref %>"
+                    <a href="<%= linkHref %>"
                        style="position: absolute; top: <%= link.top %>rem; left: <%= link.left %>rem; width: <%= link.width %>rem; height: <%= link.height %>rem;">
                     </a>
                     <%
@@ -392,7 +392,7 @@
 
                                 <a :href="(activityItem.activityType == 'promotion' ? 'fmcgshop://activity/' : 'fmcgshop://packActivity/') + activityItem.activityId"
                                    class="goods-item">
-                                    <img class="placeholder-img" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/20181111-main-venue/more.jpg">
+                                    <img class="placeholder-img" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/img/more.jpg">
                                 </a>
                             </div>
                         </div>
@@ -402,7 +402,7 @@
                 <!--楼层导航开始-->
                 <div id="J-module-<%= moduleIndex + 1 %>">
                     <div id="menu"
-                         v-if="activityList.length > 1"
+                         v-if="activityData.length > 1"
                          class="menu-wrap"
                          style="background-color: <%= module.menuBgColor %>; color: <%= module.menuFontColor %>;"
                          v-show="flag">
@@ -468,9 +468,6 @@
 </div>
 
 <script>
-    //  1. 没有注释的  不用动  直接复制；
-    //  2. 活动【不可以】是套装活动
-    //  3. 不要修改 代码的位置
     <%
         var floorModule = moduleList.filter(function (module, moduleIndex) { return (module.moduleType == 'floor' || module.moduleType == 'slideFloor'); })[0];
         var bannerList = moduleList.filter(function (module, moduleIndex) { return module.moduleType == 'slideBanner'; });
@@ -521,10 +518,10 @@
     window.spCode = '<%= testUser + testPassword %>';
 </script>
 
-<script type="text/javascript" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/h5-activity/lib/vue.min.js"></script>
-<script type="text/javascript" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/h5-activity/lib/vue-resource.min.js"></script>
-<script type="text/javascript" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/h5-activity/js/common.js"></script>
+<script type="text/javascript" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/lib/vue.min.js"></script>
+<script type="text/javascript" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/lib/vue-resource.min.js"></script>
+<script type="text/javascript" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/js/common.js"></script>
 
-<script src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/yy/h5-activity/js/activity-page.js"></script>
+<script src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/js/activity-page.js"></script>
 </body>
 </html>

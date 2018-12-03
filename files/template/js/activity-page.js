@@ -278,7 +278,7 @@ new Vue({
             };
 
             this.launchMiniProgram(JSON.stringify(params));
-        },
+        }
     },
     created: function () {
         var _this = this;
@@ -308,7 +308,7 @@ new Vue({
 
         if (document.getElementById('menu')) {
             window.addEventListener('scroll', function () {
-                _this.eleScroll
+                _this.eleScroll();
             });
         }
 
