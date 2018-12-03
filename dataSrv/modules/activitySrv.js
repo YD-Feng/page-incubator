@@ -97,6 +97,7 @@ module.exports = {
                     SQL = '';
 
                 arr.push('activity_name = ' + connPool.escape(opts.activity_name));
+                arr.push('folder = ' + connPool.escape(opts.folder));
 
                 if (typeof opts.activity_desc != 'undefined' && opts.activity_desc != '') {
                     //校验中间件不校验的非必传字段
@@ -113,9 +114,10 @@ module.exports = {
 
             } else {
                 //没传入ID，则新增
-                var SQL = 'insert into activity (activity_name, activity_desc, create_name) ',
+                var SQL = 'insert into activity (activity_name, folder, activity_desc, create_name) ',
                     values = [
                         connPool.escape(opts.activity_name),
+                        connPool.escape(opts.folder),
                         connPool.escape(opts.activity_desc),
                         connPool.escape(opts.create_name)
                     ];

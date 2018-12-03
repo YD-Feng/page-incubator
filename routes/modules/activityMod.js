@@ -37,6 +37,7 @@ module.exports = {
         activitySrv.saveActivity({
             activity_id: req.body.activity_id,
             activity_name: req.body.activity_name,
+            folder: req.body.folder,
             activity_desc: req.body.activity_desc,
             create_name: req.cookies.nick_name
         }, function (result) {
