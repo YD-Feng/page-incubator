@@ -45,7 +45,6 @@
             margin-bottom: 0.1rem;
             padding-right: 0.5rem;
             position: relative;
-            display: none;
         }
         .page-main .menu-wrap .btn{
             font-family: SimSun;
@@ -317,7 +316,7 @@
                         }
                     %>
                     <a href="<%= linkHref %>"
-                       style="position: absolute; top: <%= link.top %>rem; left: <%= link.left %>rem; width: <%= link.width %>rem; height: <%= link.height %>rem;">
+                       style="position: absolute; top: <%= link.top / 100 %>rem; left: <%= link.left / 100 %>rem; width: <%= link.width / 100 %>rem; height: <%= link.height / 100 %>rem;">
                     </a>
                     <%
                     });
@@ -413,11 +412,11 @@
                                 :style="{'width': ulWidth + 'px'}">
                                 <li v-for="(activityItem, index) in activityData"
                                     :class="{current: activityItem.flag}"
-                                    :style="color: activityItem.flag ? <%= module.menuCurColor %> : ''"
+                                    :style="{color: activityItem.flag ? '<%= module.menuCurColor %>' : ''}"
                                     @click="toTitle('J-floor-' + index, activityItem, index, $event)">
                                     {{ activityItem.activityTitle }}
                                     <div class="line"
-                                         :style="backgroundColor: activityItem.flag ? <%= module.menuCurColor %> : ''">
+                                         :style="{backgroundColor: activityItem.flag ? '<%= module.menuCurColor %>' : ''}">
                                     </div>
                                 </li>
                             </ul>
@@ -432,7 +431,7 @@
                             v-show="allMenuVisible">
                             <li class="item"
                                 v-for="(activityItem, index) in activityData"
-                                @click="toTitle('J-floor-' + index, activityItem, $index, $event)">
+                                @click="toTitle('J-floor-' + index, activityItem, index, $event)">
                                 {{ activityItem.activityTitle }}
                             </li>
                         </ul>
@@ -470,7 +469,7 @@
 <script>
     <%
         var floorModule = moduleList.filter(function (module, moduleIndex) { return (module.moduleType == 'floor' || module.moduleType == 'slideFloor'); })[0];
-        var bannerList = moduleList.filter(function (module, moduleIndex) { return module.moduleType == 'slideBanner'; });
+        var bannerModule = moduleList.filter(function (module, moduleIndex) { return module.moduleType == 'slideBanner'; })[0];
         var activityList = floorModule ? floorModule.floorList.map(function (item) {
             return {
                 flag: false,
@@ -487,7 +486,7 @@
                 ]
             }
         }) : [];
-        var swiperList = bannerList.map(function (item) {
+        var swiperList = bannerModule.bannerList.map(function (item) {
             var linkHref = '';
             if (item.linkType == 'module' || item.linkType == 'floor') {
                 linkHref = '#J-' + item.linkType + '-' + item[item.linkType + 'Index'];
