@@ -183,7 +183,7 @@
                                         @change="handleModuleTypeChange">
                                         <el-option
                                             v-for="(value, key) in dict.moduleType"
-                                            :disabled="floorModule.index != -1 && floorModule.index != index && (key == 'floor' || key == 'slideFloor')"
+                                            :disabled="checkOptionDisabled(index, key)"
                                             :key="key"
                                             :value="key"
                                             :label="value">
@@ -864,9 +864,30 @@
                 });
 
                 return result;
+            },
+            bannerModule () {
+                var result = {
+                    module: null,
+                    index: -1
+                };
+
+                this.moduleList.forEach(function (item, index) {
+                    if (item.moduleType == 'slideBanner') {
+                        result.module = item;
+                        result.index = index;
+                    }
+                });
+
+                return result;
             }
         },
         methods: {
+            checkOptionDisabled (moduleIndex, moduleType) {
+                var _this = this;
+                return ( (_this.floorModule.index != -1 && _this.floorModule.index != moduleIndex && (moduleType == 'floor' || moduleType == 'slideFloor')) ||
+                    (_this.bannerModule.index != -1 && _this.bannerModule.index != moduleIndex && (moduleType == 'slideBanner')) );
+            },
+
             getActivityPageDetail () {
                 var _this = this;
 
@@ -1431,6 +1452,7 @@
         position: relative;
         font-size: 0;
         border: 1px solid #f0f0f0;
+        overflow: hidden;
     }
     .simple-module .placeholder{
         height: 200px;
