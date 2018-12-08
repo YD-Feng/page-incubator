@@ -239,7 +239,23 @@
                         </table>
 
                         <el-button
-                            class="btn"
+                            class="btn btn-up"
+                            type="default"
+                            icon="el-icon-arrow-up"
+                            :disabled="index == 0"
+                            @click="handleUpModule($event, index)">
+                        </el-button>
+
+                        <el-button
+                            class="btn btn-down"
+                            type="default"
+                            icon="el-icon-arrow-down"
+                            :disabled="index == moduleList.length - 1"
+                            @click="handleDownModule($event, index)">
+                        </el-button>
+
+                        <el-button
+                            class="btn btn-del"
                             type="default"
                             icon="el-icon-delete"
                             @click="handleDelModule($event, index)">
@@ -263,7 +279,8 @@
             <div class="module-view-wrap">
                 <p class="lh40px f14px fBold">模块预览</p>
 
-                <div class="no-data" v-if="!curModule">
+                <div class="no-data"
+                     v-if="!curModule">
                     请先添加模块
                 </div>
 
@@ -932,6 +949,7 @@
             },
             handleDelModule (e, index) {
                 e.stopPropagation();
+                e.currentTarget.blur();
                 var _this = this;
 
                 if (index <= _this.curModuleIndex) {
@@ -941,6 +959,30 @@
                 }
 
                 _this.moduleList.splice(index, 1);
+            },
+            handleUpModule (e, index) {
+                e.stopPropagation();
+                e.currentTarget.blur();
+                var _this = this,
+                    targetModule = _this.moduleList.splice(index, 1)[0];
+
+                _this.moduleList.splice(index - 1, 0, targetModule);
+
+                if (_this.curModuleIndex == index) {
+                    _this.curModuleIndex--;
+                }
+            },
+            handleDownModule (e, index) {
+                e.stopPropagation();
+                e.currentTarget.blur();
+                var _this = this,
+                    targetModule = _this.moduleList.splice(index, 1)[0];
+
+                _this.moduleList.splice(index + 1, 0, targetModule);
+
+                if (_this.curModuleIndex == index) {
+                    _this.curModuleIndex++;
+                }
             },
             handleCurModule (index) {
                 this.curModuleIndex = index;
@@ -1423,6 +1465,16 @@
         padding: 0;
         border-radius: 50%;
         position: absolute;
+    }
+    .module-item .btn-up{
+        top: 13px;
+        right: 86px;
+    }
+    .module-item .btn-down{
+        top: 13px;
+        right: 52px;
+    }
+    .module-item .btn-del{
         top: 13px;
         right: 18px;
         color: #e20000;
