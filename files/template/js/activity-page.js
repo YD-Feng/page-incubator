@@ -89,7 +89,7 @@ new Vue({
                         _this.ulWidth += 10;
 
                         _this.activityData.forEach(function (item, index) {
-                            _this.offsetTopList.push(document.getElementById('id' + index).offsetTop - 0.8 * parseFloat(window.getComputedStyle(document.documentElement, null).fontSize));
+                            _this.offsetTopList.push(document.getElementById('J-floor-' + index).offsetTop - 0.8 * parseFloat(window.getComputedStyle(document.documentElement, null).fontSize));
                         });
                     });
                 }
@@ -139,7 +139,7 @@ new Vue({
                         _this.ulWidth += 10;
 
                         _this.activityData.forEach(function (item, index) {
-                            _this.offsetTopList.push(document.getElementById('id' + index).offsetTop - 0.8 * parseFloat(window.getComputedStyle(document.documentElement, null).fontSize));
+                            _this.offsetTopList.push(document.getElementById('J-floor-' + index).offsetTop - 0.8 * parseFloat(window.getComputedStyle(document.documentElement, null).fontSize));
                         });
                     });
                 }
@@ -159,7 +159,8 @@ new Vue({
             // 获取当前宽度下的  html 字体大小
             var winFontSize = parseFloat(window.getComputedStyle(document.documentElement, null).fontSize);
 
-            document.body.scrollTop = document.getElementById(id).offsetTop - 0.7 * winFontSize;
+            document.body.scrollTop = document.getElementById(id).offsetTop - 0.7 * winFontSize + 2;
+            document.documentElement.scrollTop = document.getElementById(id).offsetTop - 0.7 * winFontSize + 2;
         },
 
         // 滚动事件
@@ -171,7 +172,7 @@ new Vue({
             }
 
             var menuEle = document.getElementById('menu');
-            _this.scroll = document.body.scrollTop;
+            _this.scroll = document.documentElement.scrollTop || document.body.scrollTop;
 
             if (_this.scroll >= menuEle.offsetTop) {
                 _this.isFixed = true;
