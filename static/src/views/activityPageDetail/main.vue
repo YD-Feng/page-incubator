@@ -309,6 +309,7 @@
                         模块{{curModuleIndex + 1}} - 链接列表
                         <el-button
                             type="text"
+                            style="vertical-align: top;"
                             @click="showDialog">
                             查看链接配置说明
                             <i class="el-icon-question"></i>

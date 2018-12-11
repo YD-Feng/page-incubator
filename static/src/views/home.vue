@@ -92,7 +92,8 @@
                         </td>
                         <td class="pb10px">
                             <el-input
-                                v-model.trim="userDialog.new_password"
+                                type="password"
+                                v-model="userDialog.new_password"
                                 placeholder="请输入新密码"
                                 class="form-input-width">
                             </el-input>
@@ -104,7 +105,8 @@
                         </td>
                         <td class="pb10px">
                             <el-input
-                                v-model.trim="userDialog.new_password_sp"
+                                type="password"
+                                v-model="userDialog.new_password_sp"
                                 placeholder="请再次输入密码"
                                 class="form-input-width">
                             </el-input>

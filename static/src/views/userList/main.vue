@@ -205,7 +205,8 @@
                         </td>
                         <td class="pb10px">
                             <el-input
-                                v-model.trim="userDialog.password"
+                                type="password"
+                                v-model="userDialog.password"
                                 placeholder="请输入用户密码(非必填)"
                                 class="form-input-width">
                             </el-input>
