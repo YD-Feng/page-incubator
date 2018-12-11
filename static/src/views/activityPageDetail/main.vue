@@ -183,7 +183,7 @@
                                         @change="handleModuleTypeChange">
                                         <el-option
                                             v-for="(value, key) in dict.moduleType"
-                                            :disabled="floorModule.index != -1 && floorModule.index != index && (key == 'floor' || key == 'slideFloor')"
+                                            :disabled="checkOptionDisabled(index, key)"
                                             :key="key"
                                             :value="key"
                                             :label="value">
@@ -239,7 +239,23 @@
                         </table>
 
                         <el-button
-                            class="btn"
+                            class="btn btn-up"
+                            type="default"
+                            icon="el-icon-arrow-up"
+                            :disabled="index == 0"
+                            @click="handleUpModule($event, index)">
+                        </el-button>
+
+                        <el-button
+                            class="btn btn-down"
+                            type="default"
+                            icon="el-icon-arrow-down"
+                            :disabled="index == moduleList.length - 1"
+                            @click="handleDownModule($event, index)">
+                        </el-button>
+
+                        <el-button
+                            class="btn btn-del"
                             type="default"
                             icon="el-icon-delete"
                             @click="handleDelModule($event, index)">
@@ -263,7 +279,8 @@
             <div class="module-view-wrap">
                 <p class="lh40px f14px fBold">模块预览</p>
 
-                <div class="no-data" v-if="!curModule">
+                <div class="no-data"
+                     v-if="!curModule">
                     请先添加模块
                 </div>
 
@@ -864,9 +881,30 @@
                 });
 
                 return result;
+            },
+            bannerModule () {
+                var result = {
+                    module: null,
+                    index: -1
+                };
+
+                this.moduleList.forEach(function (item, index) {
+                    if (item.moduleType == 'slideBanner') {
+                        result.module = item;
+                        result.index = index;
+                    }
+                });
+
+                return result;
             }
         },
         methods: {
+            checkOptionDisabled (moduleIndex, moduleType) {
+                var _this = this;
+                return ( (_this.floorModule.index != -1 && _this.floorModule.index != moduleIndex && (moduleType == 'floor' || moduleType == 'slideFloor')) ||
+                    (_this.bannerModule.index != -1 && _this.bannerModule.index != moduleIndex && (moduleType == 'slideBanner')) );
+            },
+
             getActivityPageDetail () {
                 var _this = this;
 
@@ -911,6 +949,7 @@
             },
             handleDelModule (e, index) {
                 e.stopPropagation();
+                e.currentTarget.blur();
                 var _this = this;
 
                 if (index <= _this.curModuleIndex) {
@@ -920,6 +959,30 @@
                 }
 
                 _this.moduleList.splice(index, 1);
+            },
+            handleUpModule (e, index) {
+                e.stopPropagation();
+                e.currentTarget.blur();
+                var _this = this,
+                    targetModule = _this.moduleList.splice(index, 1)[0];
+
+                _this.moduleList.splice(index - 1, 0, targetModule);
+
+                if (_this.curModuleIndex == index) {
+                    _this.curModuleIndex--;
+                }
+            },
+            handleDownModule (e, index) {
+                e.stopPropagation();
+                e.currentTarget.blur();
+                var _this = this,
+                    targetModule = _this.moduleList.splice(index, 1)[0];
+
+                _this.moduleList.splice(index + 1, 0, targetModule);
+
+                if (_this.curModuleIndex == index) {
+                    _this.curModuleIndex++;
+                }
             },
             handleCurModule (index) {
                 this.curModuleIndex = index;
@@ -1402,6 +1465,16 @@
         padding: 0;
         border-radius: 50%;
         position: absolute;
+    }
+    .module-item .btn-up{
+        top: 13px;
+        right: 86px;
+    }
+    .module-item .btn-down{
+        top: 13px;
+        right: 52px;
+    }
+    .module-item .btn-del{
         top: 13px;
         right: 18px;
         color: #e20000;
@@ -1431,6 +1504,7 @@
         position: relative;
         font-size: 0;
         border: 1px solid #f0f0f0;
+        overflow: hidden;
     }
     .simple-module .placeholder{
         height: 200px;
