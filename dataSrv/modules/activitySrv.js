@@ -137,12 +137,30 @@ module.exports = {
     //删除活动
     delActivity: function (opts, callback) {
         connPool.getConnection(function (err, connection) {
-            var SQL = 'delete from activity where activity_id = ' + connPool.escape(opts.activity_id);
+            var delPageSQL = 'delete from activity_page where activity_id = ' + connPool.escape(opts.activity_id),
+                delActivitySQL = 'delete from activity where activity_id = ' + connPool.escape(opts.activity_id);
 
-            connection.query(SQL, function (err, result) {
+            //开启事务
+            connection.beginTransaction(function (err) {
                 if (err) throw err;
-                callback(result);
-                connection.release();//释放链接
+
+                connection.query(delPageSQL, function (err, delPageResult) {
+                    if (err) throw err;
+
+                    connection.query(delActivitySQL, function (err, delActivityResult) {
+                        if (err) throw err;
+
+                        connection.commit(function (err) {
+                            if (err) {
+                                connection.rollback(function () {
+                                    throw err;
+                                });
+                            }
+                            callback(delActivityResult);
+                            connection.release();//释放链接
+                        });
+                    });
+                });
             });
         });
     }

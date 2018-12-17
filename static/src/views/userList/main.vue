@@ -147,7 +147,7 @@
 
                     <el-popover :ref="'p' + scope.$index" placement="top">
                         <p class="lh40px pt5px pb5px">
-                            <i class="el-icon-information cm-text-orange mr5px"></i>
+                            <i class="el-icon-warning cm-text-orange mr5px"></i>
                             请问确定要删除此用户吗？
                         </p>
                         <div class="text-center">

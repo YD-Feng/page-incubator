@@ -68,10 +68,10 @@ module.exports = {
             connection.beginTransaction(function (err) {
                 if (err) throw err;
 
-                connection.query(delPageSQL, function (err, result) {
+                connection.query(delPageSQL, function (err, delPageResult) {
                     if (err) throw err;
 
-                    connection.query(delAreaSQL, function (err, result) {
+                    connection.query(delAreaSQL, function (err, delAreaResult) {
                         if (err) throw err;
 
                         connection.commit(function (err) {
@@ -80,7 +80,7 @@ module.exports = {
                                     throw err;
                                 });
                             }
-                            callback(result);
+                            callback(delAreaResult);
                             connection.release();//释放链接
                         });
                     });

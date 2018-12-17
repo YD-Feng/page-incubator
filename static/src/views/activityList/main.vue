@@ -120,29 +120,16 @@
                     <el-button
                         size="small"
                         type="success"
-                        @click="openDialog(scope.row)"
-                        class="ml5px">
+                        @click="openDialog(scope.row)">
                         编辑
                     </el-button>
 
-                    <el-popover :ref="'p' + scope.$index" placement="top">
-                        <p class="lh40px pt5px pb5px">
-                            <i class="el-icon-information cm-text-orange mr5px"></i>
-                            请问确定要删除此活动吗？
-                        </p>
-                        <div class="text-center">
-                            <el-button type="primary" size="small" @click="handleDelActivity(scope.$index, scope.row)">确定</el-button>
-                            <el-button type="warning" size="small" @click="hidePop(scope.$index)">取消</el-button>
-                        </div>
-
-                        <el-button
-                            type="danger"
-                            size="small"
-                            slot="reference"
-                            class="ml5px">
-                            删除
-                        </el-button>
-                    </el-popover>
+                    <el-button
+                        type="danger"
+                        size="small"
+                        @click="handleDelActivity(scope.$index, scope.row)">
+                        删除
+                    </el-button>
                 </template>
             </el-table-column>
         </el-table>
@@ -302,11 +289,19 @@
                 this.$refs.form.resetFields();
             },
 
-            //隐藏启用、停用提示框
-            hidePop (index) {
-                this.$refs['p' + index].doClose();
-            },
             handleDelActivity (index, row) {
+                var _this = this;
+
+                _this.$confirm('删除活动的同时，会把活动相关的所有页面删除，请问确定要删除此活动吗？', '系统提示', {
+                    confirmButtonText: '确定',
+                    cancelButtonText: '取消',
+                    customClass: 'cm-confirm-box',
+                    type: 'warning'
+                }).then(function () {
+                    _this.doDelActivity(index, row);
+                }, function () {});
+            },
+            doDelActivity (index, row) {
                 var _this = this;
 
                 _this.$post({
@@ -317,7 +312,6 @@
                     success: function (res) {
                         _this.$message.success('删除成功');
                         _this.form.page = 1;
-                        _this.hidePop(index);
                         _this.search();
                     }
                 });
