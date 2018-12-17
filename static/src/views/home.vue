@@ -51,11 +51,13 @@
 
         <!-- 内容区 -->
         <div class="container">
-            <div class="container-inner" v-bar v-auto-height="{'delHeight': 94}">
-                <div class="pt10px pb10px pl15px pr15px">
+            <div>
+                <div class="container-inner" v-bar v-auto-height="{'delHeight': 94}">
+                    <div>
 
-                    <router-view></router-view>
+                        <router-view></router-view>
 
+                    </div>
                 </div>
             </div>
         </div>

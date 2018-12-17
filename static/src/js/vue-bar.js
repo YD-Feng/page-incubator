@@ -182,7 +182,7 @@
                 if (state.visibleArea >= 1) {
                     state.barHeight = 0;
                 } else {
-                    state.barHeight = state.el2.clientHeight * state.visibleArea;
+                    state.barHeight = state.el2.clientHeight * state.visibleArea - 20;
                 }
             }
             function computeBarWidth (el) {
@@ -190,7 +190,7 @@
                 if (state.visibleAreaX >= 1) {
                     state.barWidth = 0;
                 } else {
-                    state.barWidth = state.el2.clientWidth * state.visibleAreaX;
+                    state.barWidth = state.el2.clientWidth * state.visibleAreaX - 20;
                 }
             }
 
@@ -407,7 +407,6 @@
                 var state = getState(el);
                 return throttle(function (event) {
                     if (state.barDragging) {
-                        console.info(1);
                         computeBarTop(el, event);
                         updateDragger(el);
                         computeScrollTop(el);
@@ -415,7 +414,6 @@
                     }
 
                     if (state.barDraggingX) {
-                        console.info(2);
                         computeBarLeft(el, event);
                         updateDragger(el);
                         computeScrollLeft(el);
