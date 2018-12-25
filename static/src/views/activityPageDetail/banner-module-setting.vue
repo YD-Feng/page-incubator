@@ -32,6 +32,16 @@
 
         <table style="width: 100%;" class="mt15px f14px">
             <tr>
+                <td colspan="2" class="lh30px pb10px">
+                    模块占位图：
+                    <el-input
+                        placeholder="请输入模块占位图url（可为空，用于占位或背景）"
+                        v-model.trim="curModule.bgImg"
+                        style="width: 296px;">
+                    </el-input>
+                </td>
+            </tr>
+            <tr>
                 <td width="50%" class="lh30px pb10px">
                     Banner高度：
                     <el-input
@@ -78,7 +88,7 @@
         </table>
 
         <template v-if="curModule.bannerHotAreaFlag">
-            <p class="f14px mb5px mt10px lh30px">
+            <p class="f14px mb5px mt15px lh30px">
                 Banner切换热区链接
                 <el-button
                     type="text"
@@ -316,6 +326,11 @@
             }
         },
         watch: {
+            'curModule.bgImg': function () {
+                if (this.initFlag) {
+                    this.$emit('moduleChange');
+                }
+            },
             'curModule.moduleHeight': function () {
                 if (this.initFlag) {
                     this.$emit('moduleChange');
@@ -406,8 +421,9 @@
                     scale = 400 / 640;
 
                 return {
+                    backgroundImage: _this.curModule.bgImg ? 'url("' + _this.curModule.bgImg + '")' : 'none',
                     backgroundColor: _this.pageBgColor,
-                    height: (Math.floor(scale * _this.curModule.moduleHeight) || 0) + 'px',
+                    height: (Math.floor(scale * _this.curModule.moduleHeight) || 0) + 'px'
                 };
             },
 

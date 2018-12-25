@@ -95,6 +95,7 @@
                             </div>
 
                             <div class="banner-module"
+                                 :style="createBannerStyle(module)"
                                  v-if="module.moduleType == 'slideBanner'"
                                  @click="handleCurPreview(moduleIndex)">
                                 <ul :style="{left: curBannerIndex * (-100) + '%'}">
@@ -157,6 +158,15 @@
         methods: {
             handleCurPreview (moduleIndex, floorIndex) {
                 this.$emit('clickModule', moduleIndex, floorIndex);
+            },
+
+            createBannerStyle (module) {
+                var scale = 290 / 640;
+
+                return {
+                    backgroundImage: module.bgImg ? 'url("' + module.bgImg + '")' : 'none',
+                    height: (Math.floor(scale * module.moduleHeight) || 0) + 'px',
+                };
             },
 
             createModalStyle () {

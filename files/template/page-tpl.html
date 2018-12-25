@@ -278,6 +278,9 @@
         .swipe {
             position: relative;
             overflow: hidden;
+            background-size: 100% 100%;
+            background-repeat: no-repeat;
+            background-position: center center;
         }
         .swipe .arrow-icon{
             position: absolute;
@@ -600,7 +603,7 @@
                 </div>
                 <% } else if (module.moduleType == 'slideBanner') { %>
                 <!--滑动Banner-->
-                <div class="swipe clearfix" style="height: <%= module.moduleHeight / 100 %>rem;">
+                <div class="swipe clearfix" style="height: <%= module.moduleHeight / 100 %>rem; background-image: <%= module.bgImg ? 'url(\'' + module.bgImg + '\')' : 'none' %>;">
                     <% if (module.bannerHotAreaFlag) { %>
                     <i class="arrow-icon"
                        style="top: <%= module.linkList[0].top / 100 %>rem;
