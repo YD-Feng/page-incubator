@@ -21,7 +21,7 @@
                         resizeRefresh: true,
                         observerThrottle: 100,
                         resizeDeBounce: 100,
-                        unSelectableBody: true, //
+                        unSelectableBody: true,
                         overrideFloatingScrollBar: true, //是否覆盖悬浮滚动条（只有在移动设备上会出现悬浮滚动条）
                         scrollingPhantomDelay: 1000, //移除拖选样式（滚动条）的延迟时间
                         draggingPhantomDelay: 1000, //移除拖选样式（滚动条外壳）的延迟时间
@@ -182,7 +182,7 @@
                 if (state.visibleArea >= 1) {
                     state.barHeight = 0;
                 } else {
-                    state.barHeight = state.el2.clientHeight * state.visibleArea - 20;
+                    state.barHeight = state.el2.clientHeight * state.visibleArea;
                 }
             }
             function computeBarWidth (el) {
@@ -190,7 +190,7 @@
                 if (state.visibleAreaX >= 1) {
                     state.barWidth = 0;
                 } else {
-                    state.barWidth = state.el2.clientWidth * state.visibleAreaX - 20;
+                    state.barWidth = state.el2.clientWidth * state.visibleAreaX;
                 }
             }
 

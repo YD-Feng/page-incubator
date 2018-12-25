@@ -24,7 +24,10 @@ new Vue({
             startX: 0,
             endOffset: 0,
             isMove: true,
-            clientWidth: document.documentElement.clientWidth || document.body.clientWidth
+            clientWidth: document.documentElement.clientWidth || document.body.clientWidth,
+
+            modalMap: window.modalMap,
+            maskVisible: false
         }
     },
     computed: {
@@ -222,6 +225,25 @@ new Vue({
             _this.offsetLeft = -1 * _this.index * _this.clientWidth;
             _this.endOffset = _this.offsetLeft;
         },
+        //左右切换
+        switchSwiper (type) {
+            var _this = this;
+
+            _this.stopSwiper();
+
+            if (type == 'prev') {
+                _this.index = _this.index >= 1 ? _this.index - 1 : _this.swiperList.length - 1;
+            }
+
+            if (type == 'next' ) {
+                _this.index =  _this.index <= _this.swiperList.length - 2 ? _this.index + 1 : 0;
+            }
+
+            _this.offsetLeft = -1 * _this.index * _this.clientWidth;
+            _this.endOffset = _this.offsetLeft;
+
+            _this.playSwiper();
+        },
         handleTouchStart: function (e) {
             var _this = this;
             _this.stopSwiper();
@@ -269,6 +291,19 @@ new Vue({
 
         toggleAllMenu: function () {
             this.allMenuVisible = !this.allMenuVisible;
+        },
+
+        openModal: function (index) {
+            this.modalMap[index].visible = true;
+            this.maskVisible = true;
+        },
+
+        closeModal: function () {
+            var _this = this;
+            for (var index in _this.modalMap) {
+                _this.modalMap[index].visible = false;
+            }
+            _this.maskVisible = false;
         },
 
         // 打开小程序

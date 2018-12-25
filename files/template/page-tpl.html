@@ -222,11 +222,86 @@
             height: 100%;
         }
 
+        .two-col-floor {
+            margin-top: 0.2rem;
+        }
+        .two-col-floor .floor-wrap {
+            padding: 0.1rem 0 0.1rem 0.1rem;
+            overflow: hidden;
+        }
+        .two-col-floor .goods-item {
+            position: relative;
+            font-size: 0.22rem;
+            width: 3.05rem;
+            height: 4.14rem;
+            float: left;
+            overflow: hidden;
+            margin-right: 0.1rem;
+            margin-bottom: 0.1rem;
+            border-radius: 0.15rem;
+        }
+        .two-col-floor .goods-item .brand-picture {
+            display: block;
+            width: 100%;
+            height: 100%;
+        }
+        .two-col-floor .goods-item .picture {
+            width: 100%;
+            height: 3.05rem;
+            display: block;
+            background: url('https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/img/place_holder_180.png') no-repeat;
+            -webkit-background-size: 100%;
+            background-size: 100%;
+        }
+        .two-col-floor .goods-item .goods-detail {
+            padding: 0.10rem;
+            position: relative;
+        }
+        .two-col-floor .goods-item .goods-detail .title {
+            margin-bottom: 0.10rem;
+            overflow: hidden;
+            white-space: nowrap;
+            text-overflow: ellipsis;
+        }
+        .two-col-floor .goods-item .goods-detail .buy {
+            position: absolute;
+            width: 0.39rem;
+            height: 0.39rem;
+            background: url('https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/img/icon-cart.png') no-repeat;
+            -webkit-background-size: 100%;
+            background-size: 100%;
+            right: 0.2rem;
+            bottom: 0.14rem;
+        }
+
         /* 修改轮播图高度 height */
         .swipe {
-            height: 2.28rem;
             position: relative;
             overflow: hidden;
+        }
+        .swipe .arrow-icon{
+            position: absolute;
+            z-index: 2;
+            cursor: pointer;
+        }
+        .swipe-banner{
+            width: 100%;
+            height: 100%;
+            overflow: hidden;
+        }
+        .swipe-banner a{
+            display: none;
+            width: 100%;
+            height: 100%;
+            -webkit-transition: all 0.3s;
+            transition: all 0.3s;
+        }
+        .swipe-banner a.show {
+            display: block;
+        }
+        .swipe-banner img{
+            width: 100%;
+            height: 100%;
         }
         .swipe ul{
             position: absolute;
@@ -280,6 +355,42 @@
             -webkit-transition: all 0.3s;
             transition: all 0.3s;
         }
+
+        .mask{
+            position: fixed;
+            z-index: 99;
+            top: 0;
+            left: 0;
+            bottom: 0;
+            right: 0;
+            background-color: rgba(0, 0, 0, 0.6);
+        }
+        .modal-module{
+            position: fixed;
+            z-index: 100;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            text-align: center;
+        }
+        .modal-module-inner{
+            width: 100%;
+            height: 100%;
+            position: relative;
+        }
+        .modal-module img{
+            width: 100%;
+            height: 100%;
+        }
+
+        .fixed-box-module{
+            position: fixed;
+            z-index: 5;
+        }
+        .fixed-box-module img{
+            width: 100%;
+            height: 100%;
+        }
     </style>
 </head>
 
@@ -311,11 +422,23 @@
                             linkHref = 'fmcgshop://mycoupons';
                         } else if (link.linkType == 'pageTop') {
                             linkHref = '#';
+                        } else if (link.linkType == 'smallProgram') {
+                            linkHref = 'openMiniProgram(\'' + link.linkValue + '\')';
+                        } else if (link.linkType == 'modalOpen') {
+                            linkHref = 'openModal(\'' + link.modalIndex + '\')';
+                        } else if (link.linkType == 'modalClose') {
+                            linkHref = 'closeModal()';
                         } else if (link.linkType == 'other') {
                             linkHref = link.linkValue;
                         }
+
+                        if (link.linkType == 'smallProgram' || link.linkType == 'modalOpen' || link.linkType == 'modalClose') {
+                            linkHref = '@click="' + linkHref + '"';
+                        } else {
+                            linkHref = 'href="' + linkHref + '"';
+                        }
                     %>
-                    <a href="<%= linkHref %>"
+                    <a <%= linkHref %>
                        style="position: absolute; top: <%= link.top / 100 %>rem; left: <%= link.left / 100 %>rem; width: <%= link.width / 100 %>rem; height: <%= link.height / 100 %>rem;">
                     </a>
                     <%
@@ -323,82 +446,120 @@
                     %>
                     <img class="bg-img" src="<%= module.bgImg %>">
                 </div>
-                <% } else if (module.moduleType == 'floor') { %>
-                <!-- 商品楼层 - 平铺型 -->
+                <% } else if (module.moduleType == 'floor' || module.moduleType == 'slideFloor') { %>
+                <!-- 商品楼层 -->
                 <div id="J-module-<%= moduleIndex + 1 %>">
                     <div v-show="flag"
                          v-for="(activityItem, index) in activityData"
                          :id="'J-floor-' + index"
-                         class="simple-floor">
-                        <div>
-                            <img :src="activityItem.image">
+                         :class="activityItem.floorCls">
+                        <template v-if="activityItem.floorType == 'simple'">
+                            <!--常规三列型楼层-->
+                            <div>
+                                <a :href="(activityItem.activityType == 'promotion' ? 'fmcgshop://activity/' : 'fmcgshop://packActivity/') + activityItem.activityId">
+                                    <img :src="activityItem.image">
+                                </a>
+
+                                <div class="goods-list">
+                                    <div class="goods-item"
+                                         v-for="(goodsItem, index) in activityItem.goodsList"
+                                         v-if="index < 12">
+                                        <a :href="goodsItem.link">
+                                            <img class="picture" :src="goodsItem.thumb">
+                                            <div class="goods-detail">
+                                                <div class="oh">
+                                                    <p class="title">{{ goodsItem.title }}</p>
+                                                    <div class="fl">
+                                                        <p>¥<span class="price">{{goodsItem.discountPrice ? goodsItem.discountPrice : goodsItem.price}}</span></p>
+                                                    </div>
+                                                    <div class="fr">
+                                                        <p class="buy"></p>
+                                                    </div>
+                                                </div>
+                                            </div>
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template v-if="activityItem.floorType == 'slide'">
+                            <!--横向滑动型楼层-->
+                            <a :href="(activityItem.activityType == 'promotion' ? 'fmcgshop://activity/' : 'fmcgshop://packActivity/') + activityItem.activityId">
+                                <img :src="activityItem.image">
+                            </a>
 
                             <div class="goods-list">
-                                <div class="goods-item"
-                                     v-for="(goodsItem, index) in activityItem.goodsList"
-                                     v-if="index < 12">
-                                    <a :href="goodsItem.link">
-                                        <img class="picture" :src="goodsItem.thumb">
-                                        <div class="goods-detail">
-                                            <div class="oh">
-                                                <p class="title">{{ goodsItem.title }}</p>
-                                                <div class="fl">
-                                                    <p>¥<span class="price">{{goodsItem.discountPrice ? goodsItem.discountPrice : goodsItem.price}}</span></p>
-                                                </div>
-                                                <div class="fr">
-                                                    <p class="buy"></p>
+                                <!-- 宽度需要自己计算-->
+                                <div :style="{width: (((activityItem.goodsList.length < 12 ? activityItem.goodsList.length : 12) + 1) * 2.8) + 'rem'}"
+                                     class="clearfix">
+                                    <!-- 楼层显示个数 12 最多12个 -->
+                                    <div class="goods-item"
+                                         v-for="(goodsItem, index) in activityItem.goodsList"
+                                         v-if="index < 12">
+                                        <a :href="goodsItem.link">
+                                            <img class="picture" :src="goodsItem.thumb">
+                                            <div class="goods-detail">
+                                                <div class="oh">
+                                                    <p class="title">{{ goodsItem.title }}</p>
+                                                    <div class="fl">
+                                                        <p>¥<span class="price">{{ goodsItem.discountPrice ? goodsItem.discountPrice : goodsItem.price}}</span></p>
+                                                    </div>
+                                                    <div class="fr">
+                                                        <p class="buy">点击购买</p>
+                                                    </div>
                                                 </div>
                                             </div>
+                                        </a>
+                                    </div>
+
+                                    <a :href="(activityItem.activityType == 'promotion' ? 'fmcgshop://activity/' : 'fmcgshop://packActivity/') + activityItem.activityId"
+                                       class="goods-item">
+                                        <img class="placeholder-img" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/img/more.jpg">
+                                    </a>
+                                </div>
+                            </div>
+                        </template>
+
+                        <template v-if="activityItem.floorType == 'twoCol'">
+                            <!--双列型楼层-->
+                            <a v-if="activityItem.imagePosition == 'top'"
+                               :href="(activityItem.activityType == 'promotion' ? 'fmcgshop://activity/' : 'fmcgshop://packActivity/') + activityItem.activityId">
+                                <img :src="activityItem.image">
+                            </a>
+
+                            <div class="floor-wrap">
+                                <div class="goods-item"
+                                     v-if="activityItem.imagePosition == 'in'">
+                                    <a :href="'fmcgshop://activity/' + activityItem.activityId">
+                                        <img class="brand-picture" :src="activityItem.image">
+                                    </a>
+                                </div>
+
+                                <div v-for="(goodsItem, index) in activityItem.goodsList"
+                                     v-if="index < (activityItem.imagePosition == 'top' ? 12 : 11)"
+                                     class="goods-item">
+                                    <a :href="'fmcgshop://goods/' + goodsItem.goodsId + '?isPresell=false'">
+                                        <img class="picture" :src="goodsItem.thumb" alt="">
+                                        <!-- 商品描述背景颜色 background-color: #16进制颜色值 字体颜色 -->
+                                        <div class="goods-detail" style="background-color: #ffffff; color: #303030;font-size: 0.28rem;">
+                                            <p class="title">{{ goodsItem.title }}</p>
+                                            <p class="price">
+                                                畅销价:¥
+                                                <span style="margin-left: 0.05rem;font-size: 0.36rem;color: #ff2121;font-weight: bold;">
+                                        {{ goodsItem.discountPrice ? goodsItem.discountPrice : goodsItem.price}}
+                                    </span>
+                                            </p>
+                                            <i class="buy"></i>
                                         </div>
                                     </a>
                                 </div>
                             </div>
-                        </div>
-                    </div>
-                </div>
-                <% } else if (module.moduleType == 'slideFloor') { %>
-                <!-- 商品楼层 - 滑动型 -->
-                <div id="J-module-<%= moduleIndex + 1 %>">
-                    <div v-show="flag"
-                         v-for="(activityItem, index) in activityData"
-                         :id="'J-floor-' + index"
-                         class="slide-floor">
-                        <img :src="activityItem.image">
-
-                        <div class="goods-list">
-                            <!-- 宽度需要自己计算-->
-                            <div :style="{width: (((activityItem.goodsList.length < 12 ? activityItem.goodsList.length : 12) + 1) * 2.8) + 'rem'}"
-                                 class="clearfix">
-                                <!-- 楼层显示个数 12 最多12个 -->
-                                <div class="goods-item"
-                                     v-for="(goodsItem, index) in activityItem.goodsList"
-                                     v-if="index < 12">
-                                    <a :href="goodsItem.link">
-                                        <img class="picture" :src="goodsItem.thumb">
-                                        <div class="goods-detail">
-                                            <div class="oh">
-                                                <p class="title">{{ goodsItem.title }}</p>
-                                                <div class="fl">
-                                                    <p>¥<span class="price">{{ goodsItem.discountPrice ? goodsItem.discountPrice : goodsItem.price}}</span></p>
-                                                </div>
-                                                <div class="fr">
-                                                    <p class="buy">点击购买</p>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </a>
-                                </div>
-
-                                <a :href="(activityItem.activityType == 'promotion' ? 'fmcgshop://activity/' : 'fmcgshop://packActivity/') + activityItem.activityId"
-                                   class="goods-item">
-                                    <img class="placeholder-img" src="https://zskx-img.oss-cn-qingdao.aliyuncs.com/h5-activity/static/img/more.jpg">
-                                </a>
-                            </div>
-                        </div>
+                        </template>
                     </div>
                 </div>
                 <% } else if (module.moduleType == 'floorMenu') { %>
-                <!--楼层导航开始-->
+                <!--楼层导航-->
                 <div id="J-module-<%= moduleIndex + 1 %>">
                     <div id="menu"
                          v-if="activityData.length > 1"
@@ -438,12 +599,30 @@
                     </div>
                 </div>
                 <% } else if (module.moduleType == 'slideBanner') { %>
-                <div class="swipe clearfix">
-                    <ul @touchstart="handleTouchStart"
+                <!--滑动Banner-->
+                <div class="swipe clearfix" style="height: <%= module.moduleHeight / 100 %>rem;">
+                    <% if (module.bannerHotAreaFlag) { %>
+                    <i class="arrow-icon"
+                       style="top: <%= module.linkList[0].top / 100 %>rem;
+                              left:  <%= module.linkList[0].left / 100 %>rem;
+                              height: <%= module.linkList[0].height / 100 %>rem;
+                              width:  <%= module.linkList[0].width / 100 %>rem;"
+                       @click="switchSwiper('prev')"></i>
+                    <i class="arrow-icon"
+                       style="top: <%= module.linkList[1].top / 100 %>rem;
+                              left:  <%= module.linkList[1].left / 100 %>rem;
+                              height: <%= module.linkList[1].height / 100 %>rem;
+                              width:  <%= module.linkList[1].width / 100 %>rem;"
+                       @click="switchSwiper('next')"></i>
+                    <% } %>
+
+                    <ul <% if (module.bannerSwitchEffect == 'slide') { %>
+                        @touchstart="handleTouchStart"
                         @touchmove="handleTouchMove"
                         @touchend="handleTouchEnd"
-                        :style="{left: offsetLeft + 'px'}"
-                        :class="{trans: isMove}">
+                        :class="{trans: isMove}"
+                        <% } %>
+                        :style="{left: offsetLeft + 'px'}">
                         <li v-for="(item, sIndex) in swiperList"
                             :key="sIndex">
                             <a :href="item.url">
@@ -451,12 +630,104 @@
                             </a>
                         </li>
                     </ul>
+                    <% if (module.bannerBottomBtnFlag) { %>
                     <ol>
                         <li v-for="(item, sIndex) in swiperList"
                             :key="sIndex"
                             :class="{current: sIndex == index}">
                         </li>
                     </ol>
+                    <% } %>
+                </div>
+                <% } else if (module.moduleType == 'modal') { %>
+                <!--页面弹窗-->
+                <div class="modal-module"
+                     v-show="modalMap['<%= moduleIndex %>'].visible"
+                    style="width: <%= module.moduleWidth / 100 %>rem; height: <%= module.moduleHeight / 100 %>rem;">
+                    <div class="modal-module-inner">
+                        <%
+                        module.linkList.forEach(function (link, linkIndex) {
+                            var linkHref = '';
+                            if (link.linkType == 'module' || link.linkType == 'floor') {
+                                linkHref = '#J-' + link.linkType + '-' + link[link.linkType + 'Index'];
+                            } else if (link.linkType == 'goods') {
+                                linkHref = 'fmcgshop://goods/' + link.linkValue + '?isPresell=false';
+                            } else if (link.linkType == 'activity') {
+                                linkHref = 'fmcgshop://activity/' + link.linkValue;
+                            } else if (link.linkType == 'packActivity') {
+                                linkHref = 'fmcgshop://packActivity/' + link.linkValue;
+                            } else if (link.linkType == 'coupon') {
+                                linkHref = 'fmcgshop://coupon/' + link.linkValue;
+                            } else if (link.linkType == 'myCoupons') {
+                                linkHref = 'fmcgshop://mycoupons';
+                            } else if (link.linkType == 'pageTop') {
+                                linkHref = '#';
+                            } else if (link.linkType == 'smallProgram') {
+                                linkHref = 'openMiniProgram(\'' + link.linkValue + '\')';
+                            } else if (link.linkType == 'modalOpen') {
+                                linkHref = 'openModal(\'' + link.modalIndex + '\')';
+                            } else if (link.linkType == 'modalClose') {
+                                linkHref = 'closeModal()';
+                            } else if (link.linkType == 'other') {
+                                linkHref = link.linkValue;
+                            }
+
+                            if (link.linkType == 'smallProgram' || link.linkType == 'modalOpen' || link.linkType == 'modalClose') {
+                                linkHref = '@click="' + linkHref + '"';
+                            } else {
+                                linkHref = 'href="' + linkHref + '"';
+                            }
+                        %>
+                        <a <%= linkHref %>
+                           style="position: absolute; top: <%= link.top / 100 %>rem; left: <%= link.left / 100 %>rem; width: <%= link.width / 100 %>rem; height: <%= link.height / 100 %>rem;">
+                        </a>
+                        <%
+                        });
+                        %>
+
+                        <img src="<%= module.bgImg%>">
+                    </div>
+                </div>
+                <% } else if (module.moduleType == 'fixedBox') { %>
+                <!--悬浮窗-->
+                <div class="fixed-box-module"
+                     style="<%= module.topOrBottom %>: <%= (module.topOrBottom == 'top' ? module.moduleTop : module.moduleBottom) / 100 %>rem; <%= module.leftOrRight %>: <%= (module.leftOrRight == 'left' ? module.moduleLeft : module.moduleRight) / 100 %>rem; width: <%= module.moduleWidth / 100 %>rem; height: <%= module.moduleHeight / 100 %>rem;">
+                    <%
+                    var linkHref = '';
+                    var link = module.linkList[0];
+                    if (link.linkType == 'module' || link.linkType == 'floor') {
+                        linkHref = '#J-' + link.linkType + '-' + link[link.linkType + 'Index'];
+                    } else if (link.linkType == 'goods') {
+                        linkHref = 'fmcgshop://goods/' + link.linkValue + '?isPresell=false';
+                    } else if (link.linkType == 'activity') {
+                        linkHref = 'fmcgshop://activity/' + link.linkValue;
+                    } else if (link.linkType == 'packActivity') {
+                        linkHref = 'fmcgshop://packActivity/' + link.linkValue;
+                    } else if (link.linkType == 'coupon') {
+                        linkHref = 'fmcgshop://coupon/' + link.linkValue;
+                    } else if (link.linkType == 'myCoupons') {
+                        linkHref = 'fmcgshop://mycoupons';
+                    } else if (link.linkType == 'pageTop') {
+                        linkHref = '#';
+                    } else if (link.linkType == 'smallProgram') {
+                        linkHref = 'openMiniProgram(\'' + link.linkValue + '\')';
+                    } else if (link.linkType == 'modalOpen') {
+                        linkHref = 'openModal(\'' + link.modalIndex + '\')';
+                    } else if (link.linkType == 'modalClose') {
+                        linkHref = 'closeModal()';
+                    } else if (link.linkType == 'other') {
+                        linkHref = link.linkValue;
+                    }
+
+                    if (link.linkType == 'smallProgram' || link.linkType == 'modalOpen' || link.linkType == 'modalClose') {
+                        linkHref = '@click="' + linkHref + '"';
+                    } else {
+                        linkHref = 'href="' + linkHref + '"';
+                    }
+                    %>
+                    <a <%= linkHref %>>
+                        <img src="<%= module.bgImg%>">
+                    </a>
                 </div>
             <%
                 }
@@ -464,30 +735,57 @@
             %>
         </div>
     </div>
+
+    <div class="mask" v-show="maskVisible"></div>
 </div>
 
 <script>
     <%
         var floorModule = moduleList.filter(function (module, moduleIndex) { return (module.moduleType == 'floor' || module.moduleType == 'slideFloor'); })[0];
         var bannerModule = moduleList.filter(function (module, moduleIndex) { return module.moduleType == 'slideBanner'; })[0];
+
         var activityList = floorModule ? floorModule.floorList.map(function (item) {
+            if (item.floorType === undefined) {
+                // moduleType 与 floorType 的对应关系
+                var obj = {
+                    floor: 'simple',
+                    slideFloor: 'slide'
+                };
+                // 如果 floorType 未定义，则说明这是1期的数据，补上 floorType 属性
+                item.floorType = obj[floorModule.moduleType];
+            }
+            if (item.titleImgPosition === undefined) {
+                item.titleImgPosition = 'top';
+            }
+
+            var floorClsMap = {
+                simple: 'simple-floor',
+                slide: 'slide-floor',
+                twoCol: 'two-col-floor'
+            };
+
             return {
                 flag: false,
                 activityTitle: item.name,
                 title: item.name,
                 activityType: item.activityType,
                 activityId: item.activityId,
+                floorType: item.floorType,
+                floorCls: floorClsMap[item.floorType],
                 image: item.titleImg,
+                imagePosition: item.titleImgPosition,
                 goodsList: [
                     {
                         title: 'loading',
                         discountPrice: 'loading'
                     }
                 ]
-            }
+            };
         }) : [];
+
         var swiperList = bannerModule ? bannerModule.bannerList.map(function (item) {
             var linkHref = '';
+            var isEvent = false;
             if (item.linkType == 'module' || item.linkType == 'floor') {
                 linkHref = '#J-' + item.linkType + '-' + item[item.linkType + 'Index'];
             } else if (item.linkType == 'goods') {
@@ -502,18 +800,38 @@
                 linkHref = 'fmcgshop://mycoupons';
             } else if (item.linkType == 'pageTop') {
                 linkHref = '#';
+            } else if (item.linkType == 'smallProgram') {
+                linkHref = 'openMiniProgram@^@' + item.linkValue;
+            } else if (item.linkType == 'modalOpen') {
+                linkHref = 'openModal@^@' + item.modalIndex;
+            } else if (item.linkType == 'modalClose') {
+                linkHref = 'closeModal';
             } else if (item.linkType == 'other') {
                 linkHref = item.linkValue;
             }
 
+            if (item.linkType == 'smallProgram' || item.linkType == 'modalOpen' || item.linkType == 'modalClose') {
+                isEvent = true;
+            }
+
             return {
                 image: item.img,
-                url: linkHref
-            }
+                url: linkHref,
+                isEvent: isEvent
+            };
         }) : [];
+
+        var modalMap = {};
+        moduleList.forEach(function (module, moduleIndex) {
+            if (module.moduleType == 'modal') {
+                modalMap[moduleIndex] = module;
+                modalMap[moduleIndex].visible = false;
+            }
+        });
     %>
     window.activityList = <%= JSON.stringify(activityList) %>;
     window.swiperList = <%= JSON.stringify(swiperList) %>;
+    window.modalMap = <%= JSON.stringify(modalMap) %>;
     window.spCode = '<%= testUser + testPassword %>';
 </script>
 
