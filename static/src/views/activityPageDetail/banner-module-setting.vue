@@ -410,7 +410,7 @@
                     this.curModule.linkList.forEach(function (link, index) {
                         link.width = 50;
                         link.height = 50;
-                        link.left = index == 0 ? 30 : 560;
+                        link.left = index == 0 ? 30 : 670;
                         link.top = 95;
                     });
                 }
@@ -418,7 +418,7 @@
 
             createBannerStyle () {
                 var _this = this,
-                    scale = 400 / 640;
+                    scale = 400 / 750;
 
                 return {
                     backgroundImage: _this.curModule.bgImg ? 'url("' + _this.curModule.bgImg + '")' : 'none',
@@ -429,7 +429,7 @@
 
             createLinkStyle (item, index) {
                 var _this = this,
-                    scale = 400 / 640;
+                    scale = 400 / 750;
 
                 return {
                     width: (Math.floor(scale * item.width) || 0) + 'px',

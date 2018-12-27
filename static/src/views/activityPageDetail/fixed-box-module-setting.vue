@@ -300,7 +300,7 @@
 
             createModalStyle () {
                 var _this = this,
-                    scale = 290 / 640,
+                    scale = 290 / 750,
                     result = {
                         width: (Math.floor(scale * _this.curModule.moduleWidth) || 0) + 'px',
                         height: (Math.floor(scale * _this.curModule.moduleHeight) || 0) + 'px',

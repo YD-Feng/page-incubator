@@ -216,7 +216,7 @@
                     <img src="../../imgs/example.png"/>
                 </p>
                 <p class="pb10px">
-                    A. 请保证切图（设计稿）的宽度为 <span class="cm-text-red fBold">640px</span>，链接热区的位置配置都必须以此为基础量出的距离才有效
+                    A. 请保证切图（设计稿）的宽度为 <span class="cm-text-red fBold">750px</span>，链接热区的位置配置都必须以此为基础量出的距离才有效
                 </p>
                 <p class="pb5px">
                     B. 热区的宽高，<span class="cm-text-blue">相对切图</span>上边、左边的距离，可使用 PhotoShop 在切图上量出。<span class="cm-text-red fBold">测量方法请见上方示意图</span>
@@ -613,7 +613,7 @@
                         {
                             width: 50,
                             height: 50,
-                            left: 560,
+                            left: 670,
                             top: 95,
                             linkType: '',
                             linkValue: '',

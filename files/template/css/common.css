@@ -126,16 +126,17 @@ button::-moz-focus-inner,input::-moz-focus-inner{
 
 html{
     -webkit-tap-highlight-color: transparent;
-    font-size: 15.625vw;
+    font-size: 13.3333vw;
+    overflow-x: hidden;
 }
-@media(min-width: 640px){
+@media(min-width: 750px){
     html {
         font-size: 100px;
     }
 }
 @media(max-width: 320px){
     html {
-        font-size: 50px;
+        font-size: 42px;
     }
 }
 

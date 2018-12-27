@@ -161,7 +161,7 @@
             },
 
             createBannerStyle (module) {
-                var scale = 290 / 640;
+                var scale = 290 / 750;
 
                 return {
                     backgroundImage: module.bgImg ? 'url("' + module.bgImg + '")' : 'none',
@@ -171,7 +171,7 @@
 
             createModalStyle () {
                 var _this = this,
-                    scale = 290 / 640;
+                    scale = 290 / 750;
 
                 return {
                     width: (Math.floor(scale * _this.curModule.moduleWidth) || 0) + 'px',
@@ -181,7 +181,7 @@
             },
 
             createFixedBoxStyle (module) {
-                var scale = 290 / 640,
+                var scale = 290 / 750,
                     result = {
                         width: (Math.floor(scale * module.moduleWidth) || 0) + 'px',
                         height: (Math.floor(scale * module.moduleHeight) || 0) + 'px',

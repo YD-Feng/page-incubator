@@ -302,8 +302,8 @@
                 _this.curModule.linkList.push({
                     width: 200,
                     height: 100,
-                    left: 220,
-                    top: 110,
+                    left: 0,
+                    top: 0,
                     linkType: '',
                     linkValue: '',
                     moduleIndex: '',
@@ -331,7 +331,7 @@
             },
             createStyle (item, index) {
                 var _this = this,
-                    scale = 400 / 640;
+                    scale = 400 / 750;
 
                 return {
                     width: (Math.floor(scale * item.width) || 0) + 'px',
