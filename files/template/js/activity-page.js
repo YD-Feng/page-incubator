@@ -162,8 +162,8 @@ new Vue({
             // 获取当前宽度下的  html 字体大小
             var winFontSize = parseFloat(window.getComputedStyle(document.documentElement, null).fontSize);
 
-            document.body.scrollTop = document.getElementById(id).offsetTop - 0.7 * winFontSize + 2;
-            document.documentElement.scrollTop = document.getElementById(id).offsetTop - 0.7 * winFontSize + 2;
+            document.body.scrollTop = document.getElementById(id).offsetTop - 0.7 * winFontSize + 10;
+            document.documentElement.scrollTop = document.getElementById(id).offsetTop - 0.7 * winFontSize + 10;
         },
 
         // 滚动事件
