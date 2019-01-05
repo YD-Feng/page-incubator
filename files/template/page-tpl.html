@@ -44,6 +44,7 @@
         .page-main .menu-wrap{
             margin-bottom: 0.12rem;
             padding-right: 0.6rem;
+            height: 0.84rem;
             position: relative;
         }
         .page-main .menu-wrap .btn{
@@ -487,7 +488,7 @@
                                 <div class="goods-list">
                                     <div class="goods-item"
                                          v-for="(goodsItem, index) in activityItem.goodsList"
-                                         v-if="index < 12">
+                                         v-if="index < 45">
                                         <a :href="goodsItem.link">
                                             <img class="picture" :src="goodsItem.thumb">
                                             <div class="goods-detail">
@@ -520,7 +521,7 @@
                                     <!-- 楼层显示个数 12 最多12个 -->
                                     <div class="goods-item"
                                          v-for="(goodsItem, index) in activityItem.goodsList"
-                                         v-if="index < 12">
+                                         v-if="index < 24">
                                         <a :href="goodsItem.link">
                                             <img class="picture" :src="goodsItem.thumb">
                                             <div class="goods-detail">
@@ -563,11 +564,11 @@
                                 </div>
 
                                 <div v-for="(goodsItem, index) in activityItem.goodsList"
-                                     v-if="index < (activityItem.imagePosition == 'top' ? 12 : 11)"
+                                     v-if="index < (activityItem.imagePosition == 'top' ? 30 : 29)"
                                      class="goods-item">
                                     <div class="goods-item-inner">
                                         <a :href="'fmcgshop://goods/' + goodsItem.goodsId + '?isPresell=false'">
-                                            <img class="picture" :src="goodsItem.thumb" alt="">
+                                            <img class="picture" :src="goodsItem.thumb">
                                             <!-- 商品描述背景颜色 background-color: #16进制颜色值 字体颜色 -->
                                             <div class="goods-detail">
                                                 <p class="title">{{ goodsItem.title }}</p>
