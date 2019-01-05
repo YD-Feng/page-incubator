@@ -92,7 +92,7 @@ new Vue({
                         _this.ulWidth += 10;
 
                         _this.activityData.forEach(function (item, index) {
-                            _this.offsetTopList.push(document.getElementById('J-floor-' + index).offsetTop - 0.8 * parseFloat(window.getComputedStyle(document.documentElement, null).fontSize));
+                            _this.offsetTopList.push(document.getElementById('J-floor-' + index).offsetTop - 0.84 * parseFloat(window.getComputedStyle(document.documentElement, null).fontSize));
                         });
                     });
                 }
@@ -142,7 +142,7 @@ new Vue({
                         _this.ulWidth += 10;
 
                         _this.activityData.forEach(function (item, index) {
-                            _this.offsetTopList.push(document.getElementById('J-floor-' + index).offsetTop - 0.8 * parseFloat(window.getComputedStyle(document.documentElement, null).fontSize));
+                            _this.offsetTopList.push(document.getElementById('J-floor-' + index).offsetTop - 0.84 * parseFloat(window.getComputedStyle(document.documentElement, null).fontSize));
                         });
                     });
                 }
