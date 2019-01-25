@@ -24,7 +24,7 @@ module.exports = {
                 ' order by activity_page.create_time desc limit ' +
                 (opts.page_size * (opts.page - 1)) +
                 ',' +
-                (opts.page_size * opts.page);
+                opts.page_size;
 
             connection.query(countSQL, function (err, countResult) {
                 if (err) throw err;
